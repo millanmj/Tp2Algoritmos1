@@ -1,11 +1,12 @@
 timestamp,telefono,coord_latitud,coord_long,ruta_foto,descripcion,ruta_audio
-datoTimestamp1,1165420541,datoCoord_lat1,datoCoord_lon1,datoRuta_foto1,datoDescripcion1,datoRuta1
-datoTimestamp2,1145367690,datoCoord_lat2,datoCoord_lon2,datoRuta_foto2,datoDescripcion2,datoRuta2
-datoTimestamp3,1156348789,datoCoord_lat3,datoCoord_lon3,datoRuta_foto3,datoDescripcion3,datoRuta3
-datoTimestamp4,1167483433,datoCoord_lat4,datoCoord_lon4,datoRuta_foto4,datoDescripcion4,datoRuta4
-datoTimestamp5,1109089870,datoCoord_lat5,datoCoord_lon5,datoRuta_foto5,datoDescripcion5,datoRuta5
-datoTimestamp6,1176465108,datoCoord_lat6,datoCoord_lon6,datoRuta_foto6,datoDescripcion6,datoRuta6
-datoTimestamp7,1135678465,datoCoord_lon7,datoRuta_foto7,datoDescripcion7,datoRuta7
-datoTimestamp8,1190784523,datoCoord_lat8,datoCoord_lon8,datoRuta_foto8,datoDescripcion8,datoRuta8
-datoTimestamp9,1176894623,datoCoord_lat9,datoCoord_lon9,datoRuta_foto9,datoDescripcion9,datoRuta9
-datoTimestamp10,2215681356,datoCoord_lat10,datoCoord_lon10,datoRuta_foto10,datoDescripcion10,datoRuta10
+datoTimestamp1,1165420541,-34.59326376666667,-58.40061399166667,datoRuta_foto1,datoDescripcion1,datoRuta1
+datoTimestamp2,1145367690,-34.59781546122449,-58.38566956122449,datoRuta_foto2,datoDescripcion2,datoRuta2
+datoTimestamp3,1156348789,-34.59064,-58.404767285714286,datoRuta_foto3,datoDescripcion3,datoRuta3
+datoTimestamp4,1167483433,-34.61661077755102,-58.36175575714286,datoRuta_foto4,datoDescripcion4,datoRuta4
+datoTimestamp5,1109089870,-34.603459891836735,-58.40455018979592,datoRuta_foto5,datoDescripcion5,datoRuta5
+datoTimestamp6,1176465108,-34.54640485714286,-58.469942442857146,datoRuta_foto6,datoDescripcion6,datoRuta6
+datoTimestamp7,1135678465,-34.54743010526316,-58.452153352631576, datoRuta_foto7,datoDescripcion7,datoRuta7
+datoTimestamp8,1190784523,-34.547698491666665,-58.449377675,datoRuta_foto8,datoDescripcion8,datoRuta8
+datoTimestamp9,1176894623,-34.5496691125, -58.45225286666666,datoRuta_foto9,datoDescripcion9,datoRuta9
+datoTimestamp10,2215681356,-34.637646516326534,-58.37199334897959,datoRuta_foto10,datoDescripcion10,datoRuta10
+datoTimestamp11,2215781356,-34.636222,-58.368375,datoRuta_foto11,datoDescripcion11,datoRuta11
