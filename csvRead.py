@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def plot_image(img, grayscale=True):
-
-    print(img.shape)
+    img = cv2.imread("{}".format("Imagenes_autos/000.png/"))
+    #print(img.shape)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     print(gray.shape)
     gray = cv2.blur(gray,(3,3))
@@ -58,7 +58,7 @@ def plot_image(img, grayscale=True):
 
 def main():
 
-    img = cv2.imread(f"C:\\Users\\Agustin\\Desktop\\Tp2Algoritmos1\\002.png")
+    img = cv2.imread(f"Imagenes_autos/000.png/")
     plot_image(img, False)
     # im = Image.open("C:\\Users\\Agustin\\Desktop\\Tp2Algoritmos1\\000.png")
     # im.show()
