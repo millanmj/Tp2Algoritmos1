@@ -37,8 +37,10 @@ def leerCSV(archivo: str) -> list:
     return datos
             
 
-def obtenerDireccion(latitud: float, longitud: float) -> list:  
+def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:  
 
+    #ACA HAY QUE TOMAR LAS COORDENAS DEL ARCHIVO CSV ORIGINAL Y HACER LA CONSULTA CON GEOLOCATOR PARA OBTENER LA DIRECCION,
+    #LOCALIDAD, PAIS ETC Y LO GUARDAMOS EN UNA LISTA QUE LUEGO ENVIAREMOS AL ARCHIVO DATOSPROCESADOS.CSV
     # reverse = partial(geolocator.reverse, language="es")
     # print(reverse("52.509669, 13.376294"))
     # geolocator = Nominatim(user_agent="example app")
@@ -59,37 +61,39 @@ def convertirVozATexto() -> str:
 def crearCsv(datos: list) -> None:
 
     try:
-        archivo = open('datosProcesados.csv', 'a')
-        for dato in datos:
-            timestamp: str = dato[0]
-            telefono: str = dato[1]
-            
-            ubicación= obtenerDireccion( dato[2], dato[3])
-
-            dirección: str = "ubicacion.direccion ó segun como nos devuelva el dato geopy lo tomamos" 
-            localidad:str = ''
-            pais: str = ''
-            patente: str = ''
-            descripcion_en_txt: str = ''
-            descripcion_del_audio: str = ''
+        #archivo = open('datosProcesados.csv', 'a')
+        
         
         with open('datosProcesados.csv', 'w', newline='', encoding="UTF-8") as archivo_csv:
             csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
 
             csv_writer.writerow(["Timestamp", "Telefono", "Dirección", "Localidad", "Pais", "Patente", "Descripcion_en_txt",  "Descripcion_del_audio"]) 
-            for padron, nombre_completo in datosProcesados.items():
-                nombre, apellido = nombre_completo
-                csv_writer.writerow((padron, nombre, apellido))
             
-            #Escribimos el header
-# 	 de la infracción	Localidad	Provincia	coordenadas	Descripción de Texto	Descripción audio	Patente	Descripción de Texto	Descripción audio  "Beruti 2857,Buenos Aires, Argentina
-#  with open(“alumnos.csv”, 'w', newline='', encoding="UTF-8") as archivo_csv:
-#         csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
-#         csv_writer.writerow(["Padron", "Nombre", "Apellido"]) #Escribimos el header
+            for dato in datos:
+                timestamp: str = dato[0]
+                telefono: str = dato[1]
+                
+                ubicacion= obtenerDireccion( dato[2], dato[3])
 
-#         for padron, nombre_completo in alumnos.items():
-#             nombre, apellido = nombre_completo
-#             csv_writer.writerow((padron, nombre, apellido))
+                direccion: str = "ubicacion.direccion ó segun como nos devuelva el dato geopy lo tomamos" 
+                localidad:str = ''
+                pais: str = ''
+                patente: str = ''
+                descripcion_en_txt: str = ''
+                descripcion_del_audio: str = ''
+            
+                         
+                csv_writer.writerow((timestamp, telefono, direccion, localidad, pais, patente, descripcion_en_txt, descripcion_del_audio))
+            
+        # with open(“alumnos.csv”, 'w', newline='', encoding="UTF-8") as archivo_csv:
+                # csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
+                # csv_writer.writerow(["Padron", "Nombre", "Apellido"]) #Escribimos el header
+
+                # for padron, nombre_completo in alumnos.items():
+                #     nombre, apellido = nombre_completo
+                #     csv_writer.writerow((padron, nombre, apellido))
+
+
 
 
     except IOError: 
@@ -103,3 +107,4 @@ def crearCsv(datos: list) -> None:
 
 
 lista = leerCSV('Denuncias.csv')
+crearCsv(lista)
