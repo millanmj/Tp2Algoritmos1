@@ -1,8 +1,13 @@
 from geopy.geocoders import Nominatim
+from functools import partial
+
 geolocator = Nominatim(user_agent="example app")
 direc_1 = geolocator.geocode("larrea 1230,Buenos Aires, Argentina")
 direc_1 = direc_1.latitude, direc_1.longitude
 print(direc_1)#Recoleta
+# reverse = partial(geolocator.reverse, language="es")
+# print(reverse("-52.509669, 13.376294"))
+
 direc_2 = geolocator.geocode("Talcahuano 932,Buenos Aires, Argentina")
 direc_2 = direc_2.latitude, direc_2.longitude
 print(direc_2)#Tribunales
