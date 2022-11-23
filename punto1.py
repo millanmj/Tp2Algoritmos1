@@ -1,9 +1,12 @@
 import csv
+import json
 import os
 
 from geopy.geocoders import Nominatim
 from functools import partial
 
+import requests
+from requests.auth import HTTPBasicAuth
 
 #2- Con la información leída del archivo CSV, se pide crear un nuevo archivo CSV que contenga los siguientes campos: (Timestamp,Teléfono, Dirección de la infracción, Localidad, Provincia, patente, descripción texto, descripción audio) 
 def leerCSV(archivo: str) -> list:
@@ -39,15 +42,21 @@ def leerCSV(archivo: str) -> list:
 
 def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:  
 
-    #ACA HAY QUE TOMAR LAS COORDENAS DEL ARCHIVO CSV ORIGINAL Y HACER LA CONSULTA CON GEOLOCATOR PARA OBTENER LA DIRECCION,
-    #LOCALIDAD, PAIS ETC Y LO GUARDAMOS EN UNA LISTA QUE LUEGO ENVIAREMOS AL ARCHIVO DATOSPROCESADOS.CSV
-    # reverse = partial(geolocator.reverse, language="es")
-    # print(reverse("52.509669, 13.376294"))
-    # geolocator = Nominatim(user_agent="example app")
-    # direc_1 = geolocator.geocode("larrea 1230,Buenos Aires, Argentina")
-    # direc_1 = direc_1.latitude, direc_1.longitude
-    # print(direc_1)#Recoleta
-    pass
+    url: str ='https://api.opencagedata.com/geocode/v1/geojson?q='
+    #Llamada a la api de posicionamiento
+    response= requests.request("GET", url+ latitud + '%2C' + longitud +'&key= ACA VA LA APIKEY QUE NO SE DEBE SUBIR AL REPO &pretty=1')
+
+    #print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))   
+    
+    dataJson= (response.json()['features'][0])
+    data: list = []
+    data.append(dataJson['properties']['components']['road'] + dataJson['properties']['components']['house_number'])
+    data.append(dataJson['properties']['components']['suburb'])    
+    data.append(dataJson['properties']['components']['city'])
+    data.append(dataJson['properties']['components']['country'])     
+    
+    return data
+    
 
 
 def obtenerPatente(rutaImagen: str) -> str:
@@ -59,6 +68,8 @@ def convertirVozATexto() -> str:
 
 
 def crearCsv(datos: list) -> None:
+
+    ubicacion: list = []
 
     try:
         #archivo = open('datosProcesados.csv', 'a')
@@ -73,11 +84,11 @@ def crearCsv(datos: list) -> None:
                 timestamp: str = dato[0]
                 telefono: str = dato[1]
                 
-                ubicacion= obtenerDireccion( dato[2], dato[3])
+                ubicacion= obtenerDireccion(datos, dato[2], dato[3])
 
-                direccion: str = "ubicacion.direccion ó segun como nos devuelva el dato geopy lo tomamos" 
-                localidad:str = ''
-                pais: str = ''
+                direccion: str = ubicacion[0]
+                localidad: str = ubicacion[1] + ', ' +ubicacion[2]
+                pais: str = ubicacion[3]
                 patente: str = ''
                 descripcion_en_txt: str = ''
                 descripcion_del_audio: str = ''
