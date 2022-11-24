@@ -1,4 +1,3 @@
-#pip install python-dotenv
 
 import csv
 import json
@@ -117,7 +116,7 @@ def crearCsv(datos: list) -> None:
         print("No se encontró el archivo")   
 
     except:
-            print("Ocurrio un error inesperado, por favor reintente mas tarde")    
+        print("Ocurrio un error inesperado, por favor reintente mas tarde")    
   
 
 
@@ -125,3 +124,4 @@ def crearCsv(datos: list) -> None:
 
 lista = leerCSV('Denuncias.csv')
 crearCsv(lista)
+#>>>>>>> 2cc24131f1a57cf6256d78ab3ed01e3d7278a9af

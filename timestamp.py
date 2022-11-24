@@ -48,12 +48,4 @@ def main():
     ts_11 = datetime.timestamp(fecha_11)
     denuncia11 = mostrar_timestamp(ts_11)
 
-
-    
-
-
-
-
-
-
 main()
