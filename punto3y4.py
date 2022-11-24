@@ -20,7 +20,7 @@ def boca(latitud: float, longitud: float) -> bool:
     """
     Devuelve True si la distancia del punto a la cancha de Boca es menor a 1km
     """
-    distancia = haversine(-34.635614, -58.364669, latitud, longitud)
+    distancia: float = haversine(-34.635614, -58.364669, latitud, longitud)
     if distancia < 1.0:
         return True
     else:
@@ -48,8 +48,7 @@ def pertenece_al_cuadrante(latitud: float, longitud: float) -> bool:
     if latitud < norte and latitud > sur:
         if longitud < este and longitud > oeste:
             return True
-    else:
-        return False
+    return False
 
 # test
 # print(pertenece_al_cuadrante(-34.585642, -58.439767))
