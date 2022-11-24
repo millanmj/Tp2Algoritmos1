@@ -1,7 +1,6 @@
-#pip install python-dotenv
+#pip install python-dotenv (instalen esto para poder usar la apikey)
 
 import csv
-import json
 import os
 
 from geopy.geocoders import Nominatim
@@ -64,7 +63,6 @@ def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:
     return data
     
 
-
 def obtenerPatente(rutaImagen: str) -> str:
     pass
 
@@ -95,11 +93,13 @@ def crearCsv(datos: list) -> None:
                 direccion: str = ubicacion[0]
                 localidad: str = ubicacion[1] + ', ' +ubicacion[2]
                 pais: str = ubicacion[3]
+                
                 patente: str = ''
                 descripcion_en_txt: str = ''
                 descripcion_del_audio: str = ''
             
-                         
+                
+
                 csv_writer.writerow((timestamp, telefono, direccion, localidad, pais, patente, descripcion_en_txt, descripcion_del_audio))
             
         # with open(“alumnos.csv”, 'w', newline='', encoding="UTF-8") as archivo_csv:
@@ -120,8 +120,28 @@ def crearCsv(datos: list) -> None:
             print("Ocurrio un error inesperado, por favor reintente mas tarde")    
   
 
+def verSiPerteneceAlRangoDeCoordenadas():
+
+    pass
+
+def verSiEsRobado(ListaDeRobados:str, Denucias):
+
+    #si esta la misma patente en los dos archivos
+
+    #debiera devolver si es o no es robado?
+    pass
 
 
 
-lista = leerCSV('Denuncias.csv')
-crearCsv(lista)
+
+
+def main() -> None:
+
+    lista: list = []
+    
+    lista = leerCSV('Denuncias.csv')
+    crearCsv(lista)
+
+
+
+main()
