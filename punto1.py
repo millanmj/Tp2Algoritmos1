@@ -1,3 +1,5 @@
+#pip install python-dotenv
+
 import csv
 import json
 import os
@@ -7,6 +9,10 @@ from functools import partial
 
 import requests
 from requests.auth import HTTPBasicAuth
+
+from settings import settings
+
+APIKEY = settings.APIKEY
 
 #2- Con la información leída del archivo CSV, se pide crear un nuevo archivo CSV que contenga los siguientes campos: (Timestamp,Teléfono, Dirección de la infracción, Localidad, Provincia, patente, descripción texto, descripción audio) 
 def leerCSV(archivo: str) -> list:
@@ -44,13 +50,13 @@ def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:
 
     url: str ='https://api.opencagedata.com/geocode/v1/geojson?q='
     #Llamada a la api de posicionamiento
-    response= requests.request("GET", url+ latitud + '%2C' + longitud +'&key= ACA VA LA APIKEY QUE NO SE DEBE SUBIR AL REPO &pretty=1')
+    response= requests.request("GET", url+ latitud + '%2C' + longitud + '&key=' + APIKEY + '&pretty=1')
 
     #print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))   
     
     dataJson= (response.json()['features'][0])
     data: list = []
-    data.append(dataJson['properties']['components']['road'] + dataJson['properties']['components']['house_number'])
+    data.append(dataJson['properties']['components']['road'] +', '+ dataJson['properties']['components']['house_number'])
     data.append(dataJson['properties']['components']['suburb'])    
     data.append(dataJson['properties']['components']['city'])
     data.append(dataJson['properties']['components']['country'])     
