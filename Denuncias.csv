@@ -1,5 +1,5 @@
 timestamp, telefono, coord_latitud, coord_long, ruta_foto,descripcion,ruta_audio
-1667672600.0,1165420541,-34.59326376666667,-58.40061399166667,datoRuta_foto1,Auto estacionado en doble fila, C:\Users\Usuario\Desktop\TP2\Tp2Algoritmos1\Audios_denuncias\denuncia1.wav
+1667672600.0,1165420541,-34.59326376666667,-58.40061399166667,datoRuta_foto1,Auto estacionado en doble fila, .\Audios_denuncias\denuncia1.wav
 1667842400.0,1145367690,-34.59781546122449,-58.38566956122449,datoRuta_foto2,auto estacionado en rampa de discapacitados,.\Audios_denuncias\denuncia2.wav
 1668990200.0,1156348789,-34.59064,-58.404767285714286,datoRuta_foto3,auto estacionado en linea amarilla,.\Audios_denuncias\denuncia3.wav
 1669146010.0,1167483433,-34.61661077755102,-58.36175575714286,datoRuta_foto4,auto estacionado en zona de descarga,.\Audios_denuncias\denuncia4.wav
