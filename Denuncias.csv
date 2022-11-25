@@ -1,12 +1,12 @@
-timestamp,telefono,coord_latitud,coord_long,ruta_foto,descripcion,ruta_audio
-1667672600.0,1165420541,-34.59326376666667,-58.40061399166667,datoRuta_foto1,datoDescripcion1,datoRuta1
-1667842400.0,1145367690,-34.59781546122449,-58.38566956122449,datoRuta_foto2,datoDescripcion2,datoRuta2
-1668990200.0,1156348789,-34.59064,-58.404767285714286,datoRuta_foto3,datoDescripcion3,datoRuta3
-1669146010.0,1167483433,-34.61661077755102,-58.36175575714286,datoRuta_foto4,datoDescripcion4,datoRuta4
-1667697800.0,1109089870,-34.603459891836735,-58.40455018979592,datoRuta_foto5,datoDescripcion5,datoRuta5
-1669254320.0,1176465108,-34.54640485714286,-58.469942442857146,datoRuta_foto6,datoDescripcion6,datoRuta6
-1669551800.0,1135678465,-34.54743010526316,-58.452153352631576, datoRuta_foto7,datoDescripcion7,datoRuta7
-1668525800.0,1190784523,-34.547698491666665,-58.449377675,datoRuta_foto8,datoDescripcion8,datoRuta8
-1668306200.0,1176894623,-34.5496691125, -58.45225286666666,datoRuta_foto9,datoDescripcion9,datoRuta9
-1668187400.0,2215681356,-34.637646516326534,-58.37199334897959,datoRuta_foto10,datoDescripcion10,datoRuta10
-1668297250.0,2215781356,-34.636222,-58.368375,datoRuta_foto11,datoDescripcion11,datoRuta11
+timestamp, telefono, coord_latitud, coord_long, ruta_foto,descripcion,ruta_audio
+1667672600.0,1165420541,-34.59326376666667,-58.40061399166667,datoRuta_foto1,Auto estacionado en doble fila,datoRuta1
+1667842400.0,1145367690,-34.59781546122449,-58.38566956122449,datoRuta_foto2,auto estacionado en rampa de discapacitados,datoRuta2
+1668990200.0,1156348789,-34.59064,-58.404767285714286,datoRuta_foto3,auto estacionado en linea amarilla,datoRuta3
+1669146010.0,1167483433,-34.61661077755102,-58.36175575714286,datoRuta_foto4,auto estacionado en zona de descarga,datoRuta4
+1667697800.0,1109089870,-34.603459891836735,-58.40455018979592,datoRuta_foto5,auto estacionado en doble fila,datoRuta5
+1669254320.0,1176465108,-34.54640485714286,-58.469942442857146,datoRuta_foto6,auto estacionado en puerta de garage,datoRuta6
+1669551800.0,1135678465,-34.54743010526316,-58.452153352631576, datoRuta_foto7,auto estacionado en rampa de discapacitados,datoRuta7
+1668525800.0,1190784523,-34.547698491666665,-58.449377675,datoRuta_foto8,auto estacionado en linea amarilla,datoRuta8
+1668306200.0,1176894623,-34.5496691125, -58.45225286666666,datoRuta_foto9,auto estacionado en puerta de garage,datoRuta9
+1668187400.0,2215681356,-34.637646516326534,-58.37199334897959,datoRuta_foto10,auto estacionado en salida de ambulancia,datoRuta10
+1668297250.0,2215781356,-34.636222,-58.368375,datoRuta_foto11,auto estacionado en zona de descarga,datoRuta11
