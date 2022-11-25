@@ -1,4 +1,3 @@
-
 import csv
 import json
 import os
@@ -10,6 +9,8 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 from settings import settings
+import speech_recognition as sr
+r = sr.Recognizer()
 
 APIKEY = settings.APIKEY
 
@@ -31,7 +32,7 @@ def leerCSV(archivo: str) -> list:
                     print("Coordenadas latitud: ",dato[2])
                     print("Coordenadas longitud: ", dato[3])
                     print("ruta foto: ", dato[4])
-                    print("Descripcion texto: ", dato[5])
+                    print("Texto de wsp: ", dato[5])
                     print("ruta audio: ", dato[6])
                     print("------------------------------------------")       
 
@@ -68,8 +69,24 @@ def obtenerPatente(rutaImagen: str) -> str:
     pass
 
 
-def convertirVozATexto() -> str:
-    pass
+def enviar_rutas_audios(datos:list):
+    lista_De_rutas:list = []
+    for audio in datos:
+        ruta = audio[6]
+        lista_De_rutas.append(ruta)
+    
+    denunciasEnTexto:list = []
+    denuncia1 = convertirVozATexto(lista_De_rutas[4])
+    print(denuncia1)
+
+
+
+def convertirVozATexto(ruta_archivo:str) -> str:
+  prueba = sr.AudioFile(ruta_archivo)
+  with prueba as source:
+    audio = r.record(source)
+  denuncia = (r.recognize_google(audio,language='es-ES'))
+  return denuncia
 
 
 def crearCsv(datos: list) -> None:
@@ -124,4 +141,6 @@ def crearCsv(datos: list) -> None:
 
 lista = leerCSV('Denuncias.csv')
 crearCsv(lista)
+enviar_rutas_audios(lista)
+
 #>>>>>>> 2cc24131f1a57cf6256d78ab3ed01e3d7278a9af

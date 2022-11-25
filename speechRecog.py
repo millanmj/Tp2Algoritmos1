@@ -24,6 +24,7 @@ def main():
  denuncia_2:str = audio_a_texto(".\\Audios_denuncias\\denuncia2.wav")
  print(denuncia_2)
  denuncia_3:str =audio_a_texto(".\\Audios_denuncias\\denuncia3.wav")
+
  print(denuncia_3)
  denuncia_4:str = audio_a_texto(".\\Audios_denuncias\\denuncia4.wav")
  print(denuncia_4)
@@ -41,8 +42,6 @@ def main():
  print(denuncia_10)
  denuncia_11:str = audio_a_texto(".\\Audios_denuncias\\denuncia11.wav")
  print(denuncia_11)
- denuncia_12:str = audio_a_texto(".\\Audios_denuncias\\denuncia12.wav")
- print(denuncia_12)
 
 
 
