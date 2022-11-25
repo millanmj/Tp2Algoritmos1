@@ -1,12 +1,12 @@
 timestamp, telefono, coord_latitud, coord_long, ruta_foto,descripcion,ruta_audio
-1667672600.0,1165420541,-34.59326376666667,-58.40061399166667,datoRuta_foto1,Auto estacionado en doble fila, \Audios_denuncias\denuncia1.wav
-1667842400.0,1145367690,-34.59781546122449,-58.38566956122449,datoRuta_foto2,auto estacionado en rampa de discapacitados,\Audios_denuncias\denuncia2.wav
-1668990200.0,1156348789,-34.59064,-58.404767285714286,datoRuta_foto3,auto estacionado en linea amarilla,\Audios_denuncias\denuncia3.wav
-1669146010.0,1167483433,-34.61661077755102,-58.36175575714286,datoRuta_foto4,auto estacionado en zona de descarga,\Audios_denuncias\denuncia4.wav
-1667697800.0,1109089870,-34.603459891836735,-58.40455018979592,datoRuta_foto5,auto estacionado en doble fila,\Audios_denuncias\denuncia5.wav
-1669254320.0,1176465108,-34.54640485714286,-58.469942442857146,datoRuta_foto6,auto estacionado en puerta de garage,\Audios_denuncias\denuncia6.wav
-1669551800.0,1135678465,-34.54743010526316,-58.452153352631576, datoRuta_foto7,auto estacionado en rampa de discapacitados,\Audios_denuncias\denuncia7.wav
-1668525800.0,1190784523,-34.547698491666665,-58.449377675,datoRuta_foto8,auto estacionado en linea amarilla,\Audios_denuncias\denuncia8.wav
-1668306200.0,1176894623,-34.5496691125, -58.45225286666666,datoRuta_foto9,auto estacionado en puerta de garage,\Audios_denuncias\denuncia9.wav
-1668187400.0,2215681356,-34.637646516326534,-58.37199334897959,datoRuta_foto10,auto estacionado en salida de ambulancia,\Audios_denuncias\denuncia10.wav
-1668297250.0,2215781356,-34.636222,-58.368375,datoRuta_foto11,auto estacionado en zona de descarga,\Audios_denuncias\denuncia11.wav
+1667672600.0,1165420541,-34.59326376666667,-58.40061399166667,datoRuta_foto1,Auto estacionado en doble fila, .\Audios_denuncias\denuncia1.wav
+1667842400.0,1145367690,-34.59781546122449,-58.38566956122449,datoRuta_foto2,auto estacionado en rampa de discapacitados,.\Audios_denuncias\denuncia2.wav
+1668990200.0,1156348789,-34.59064,-58.404767285714286,datoRuta_foto3,auto estacionado en linea amarilla,.\Audios_denuncias\denuncia3.wav
+1669146010.0,1167483433,-34.61661077755102,-58.36175575714286,datoRuta_foto4,auto estacionado en zona de descarga,.\Audios_denuncias\denuncia4.wav
+1667697800.0,1109089870,-34.603459891836735,-58.40455018979592,datoRuta_foto5,auto estacionado en doble fila,.\Audios_denuncias\denuncia5.wav
+1669254320.0,1176465108,-34.54640485714286,-58.469942442857146,datoRuta_foto6,auto estacionado en puerta de garage,.\Audios_denuncias\denuncia6.wav
+1669551800.0,1135678465,-34.54743010526316,-58.452153352631576, datoRuta_foto7,auto estacionado en rampa de discapacitados,.\Audios_denuncias\denuncia7.wav
+1668525800.0,1190784523,-34.547698491666665,-58.449377675,datoRuta_foto8,auto estacionado en linea amarilla,.\Audios_denuncias\denuncia8.wav
+1668306200.0,1176894623,-34.5496691125, -58.45225286666666,datoRuta_foto9,auto estacionado en puerta de garage,.\Audios_denuncias\denuncia9.wav
+1668187400.0,2215681356,-34.637646516326534,-58.37199334897959,datoRuta_foto10,auto estacionado en salida de ambulancia,.\Audios_denuncias\denuncia10.wav
+1668297250.0,2215781356,-34.636222,-58.368375,datoRuta_foto11,auto estacionado en zona de descarga,.\Audios_denuncias\denuncia11.wav
