@@ -51,7 +51,6 @@ def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:
     url: str ='https://api.opencagedata.com/geocode/v1/geojson?q='
     #Llamada a la api de posicionamiento
     response= requests.request("GET", url+ latitud + '%2C' + longitud + '&key=' + APIKEY + '&pretty=1')
-
     #print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))   
     
     dataJson= (response.json()['features'][0])
@@ -93,32 +92,38 @@ def convertirVozATexto(ruta_archivo:str) -> str:
 def crearCsv(datos: list) -> None:
 
     ubicacion: list = []
+    matriz:list = [["Timestamp", "Telefono", "Dirección", "Localidad", "Pais", "Patente", "Descripcion_en_txt",  "Descripcion_del_audio"]]
+    for dato in datos:
+            lista:list = []
+            timestamp: str = dato[0]
+            telefono: str = dato[1]
+                
+            ubicacion= obtenerDireccion(datos, dato[2], dato[3])
 
+            direccion: str = ubicacion[0]
+            localidad: str = ubicacion[1] + ', ' +ubicacion[2]
+            pais: str = ubicacion[3]
+            patente: str = ''
+            descripcion_en_txt: str = dato[5]
+            descripcion_del_audio: str = ''
+            lista.append(timestamp)
+            lista.append(telefono)
+            lista.append(direccion)
+            lista.append(localidad)
+            lista.append(pais)
+            lista.append(patente)
+            lista.append(descripcion_en_txt)
+            lista.append(descripcion_del_audio)
+            matriz.append(lista)
+        
+        
     try:
         #archivo = open('datosProcesados.csv', 'a')
         
+        with open('datosProcesados.csv', 'w', newline='') as file:
+            csv_writer = csv.writer(file, delimiter=',')
+            csv_writer.writerows(matriz)
         
-        with open('datosProcesados.csv', 'w', newline='', encoding="UTF-8") as archivo_csv:
-            csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
-
-            csv_writer.writerow(["Timestamp", "Telefono", "Dirección", "Localidad", "Pais", "Patente", "Descripcion_en_txt",  "Descripcion_del_audio"]) 
-            
-            for dato in datos:
-                timestamp: str = dato[0]
-                telefono: str = dato[1]
-                
-                ubicacion= obtenerDireccion(datos, dato[2], dato[3])
-
-                direccion: str = ubicacion[0]
-                localidad: str = ubicacion[1] + ', ' +ubicacion[2]
-                pais: str = ubicacion[3]
-                patente: str = ''
-                descripcion_en_txt: str = dato[5]
-                descripcion_del_audio: str = ''
-            
-                         
-                csv_writer.writerow((timestamp, telefono, direccion, localidad, pais, patente, descripcion_en_txt, descripcion_del_audio))
-            
         # with open(“alumnos.csv”, 'w', newline='', encoding="UTF-8") as archivo_csv:
                 # csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
                 # csv_writer.writerow(["Padron", "Nombre", "Apellido"]) #Escribimos el header
@@ -141,7 +146,9 @@ def crearCsv(datos: list) -> None:
 
 
 lista = leerCSV('Denuncias.csv')
-crearCsv(lista)
-audio_A_texto:list = enviar_rutas_audios(lista)
+nuevo_csv = crearCsv(lista)
+
+audio_A_texto:list = enviar_rutas_audios(lista)#audios en texto
+
 
 #>>>>>>> 2cc24131f1a57cf6256d78ab3ed01e3d7278a9af
