@@ -10,7 +10,8 @@ from requests.auth import HTTPBasicAuth
 
 from settings import settings
 import speech_recognition as sr
-r = sr.Recognizer()
+
+import punto3y4
 
 APIKEY = settings.APIKEY
 
@@ -44,7 +45,7 @@ def leerCSV(archivo: str) -> list:
             print("Ocurrio un error inesperado, por favor reintente mas tarde")    
 
     return datos
-            
+             
 
 def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:  
 
@@ -63,9 +64,17 @@ def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:
     return data
     
 
-
 def obtenerPatente(rutaImagen: str) -> str:
     pass
+
+
+def convertirVozATexto(ruta_archivo:str) -> str:
+    r = sr.Recognizer()
+    prueba = sr.AudioFile(ruta_archivo)
+    with prueba as source:
+        audio = r.record(source)
+    denuncia = (r.recognize_google(audio,language='es-ES'))
+    return denuncia
 
 
 def enviar_rutas_audios(datos:list):
@@ -81,18 +90,13 @@ def enviar_rutas_audios(datos:list):
     
     return denunciasEnTexto
 
-def convertirVozATexto(ruta_archivo:str) -> str:
-  prueba = sr.AudioFile(ruta_archivo)
-  with prueba as source:
-    audio = r.record(source)
-  denuncia = (r.recognize_google(audio,language='es-ES'))
-  return denuncia
-
 
 def crearCsv(datos: list) -> None:
-
+    audios : list = []
     ubicacion: list = []
     matriz:list = [["Timestamp", "Telefono", "Dirección", "Localidad", "Pais", "Patente", "Descripcion_en_txt",  "Descripcion_del_audio"]]
+    
+
     for dato in datos:
             lista:list = []
             timestamp: str = dato[0]
@@ -103,9 +107,13 @@ def crearCsv(datos: list) -> None:
             direccion: str = ubicacion[0]
             localidad: str = ubicacion[1] + ', ' +ubicacion[2]
             pais: str = ubicacion[3]
-            patente: str = ''
+
+            patente: str = 'leerPatente()' 
+
             descripcion_en_txt: str = dato[5]
-            descripcion_del_audio: str = ''
+
+            descripcion_del_audio: str = convertirVozATexto(dato[6])
+
             lista.append(timestamp)
             lista.append(telefono)
             lista.append(direccion)
@@ -123,15 +131,7 @@ def crearCsv(datos: list) -> None:
         with open('datosProcesados.csv', 'w', newline='') as file:
             csv_writer = csv.writer(file, delimiter=',')
             csv_writer.writerows(matriz)
-        
-        # with open(“alumnos.csv”, 'w', newline='', encoding="UTF-8") as archivo_csv:
-                # csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
-                # csv_writer.writerow(["Padron", "Nombre", "Apellido"]) #Escribimos el header
-
-                # for padron, nombre_completo in alumnos.items():
-                #     nombre, apellido = nombre_completo
-                #     csv_writer.writerow((padron, nombre, apellido))
-
+              
 
 
 
@@ -140,15 +140,44 @@ def crearCsv(datos: list) -> None:
 
     except:
         print("Ocurrio un error inesperado, por favor reintente mas tarde")    
-  
 
 
+def leerTxt(archivo: str) -> list:
+    autosRobados: list = []
+    try: 
+        with open(archivo, 'r') as robados:
+            for auto in robados:               
+                autosRobados.append(auto.strip('\n'))
+        
+    except IOError: 
+        print("No se encontró el archivo")   
+
+    except:
+        print("Ocurrio un error inesperado, por favor reintente mas tarde") 
+    
+    
+    return autosRobados
 
 
-lista = leerCSV('Denuncias.csv')
-nuevo_csv = crearCsv(lista)
+def Robados(archivoRobados: str, datos: list, ) -> None:
 
-audio_A_texto:list = enviar_rutas_audios(lista)#audios en texto
+    autosRobados = leerTxt(archivoRobados)
+
+    datosProcesados: list = leerProcesados() 
+
+    pass
 
 
-#>>>>>>> 2cc24131f1a57cf6256d78ab3ed01e3d7278a9af
+def main() -> None:
+
+
+    # lista = leerCSV('Denuncias.csv')    
+    # nuevo_csv = crearCsv(lista)
+
+    robados = leerTxt('robados.txt')
+
+    print(robados)
+
+main()
+
+
