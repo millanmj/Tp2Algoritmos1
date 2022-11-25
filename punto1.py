@@ -76,10 +76,11 @@ def enviar_rutas_audios(datos:list):
         lista_De_rutas.append(ruta)
     
     denunciasEnTexto:list = []
-    denuncia1 = convertirVozATexto(lista_De_rutas[4])
-    print(denuncia1)
-
-
+    for denuncia in (lista_De_rutas):
+        text:str = convertirVozATexto(denuncia)
+        denunciasEnTexto.append(text)
+    
+    return denunciasEnTexto
 
 def convertirVozATexto(ruta_archivo:str) -> str:
   prueba = sr.AudioFile(ruta_archivo)
@@ -112,7 +113,7 @@ def crearCsv(datos: list) -> None:
                 localidad: str = ubicacion[1] + ', ' +ubicacion[2]
                 pais: str = ubicacion[3]
                 patente: str = ''
-                descripcion_en_txt: str = ''
+                descripcion_en_txt: str = dato[5]
                 descripcion_del_audio: str = ''
             
                          
@@ -141,6 +142,6 @@ def crearCsv(datos: list) -> None:
 
 lista = leerCSV('Denuncias.csv')
 crearCsv(lista)
-enviar_rutas_audios(lista)
+audio_A_texto:list = enviar_rutas_audios(lista)
 
 #>>>>>>> 2cc24131f1a57cf6256d78ab3ed01e3d7278a9af
