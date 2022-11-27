@@ -3,6 +3,7 @@
 import csv
 import os
 
+from datetime import datetime
 from geopy.geocoders import Nominatim
 from functools import partial
 
@@ -38,15 +39,15 @@ def leerCSV(archivo: str) -> list:
 
 def imprimirCsv(datos: list) -> None:
 
-      for dato in datos:                    
-                    print("fecha y hora de la denuncia: ", dato[0])
-                    print("número: ", dato[1])
-                    print("Coordenadas latitud: ",dato[2])
-                    print("Coordenadas longitud: ", dato[3])
-                    print("ruta foto: ", dato[4])
-                    print("Texto de wsp: ", dato[5])
-                    print("ruta audio: ", dato[6])
-                    print("------------------------------------------")  
+    for dato in datos:                    
+        print("fecha y hora de la denuncia: ", dato[0])
+        print("número: ", dato[1])
+        print("Coordenadas latitud: ",dato[2])
+        print("Coordenadas longitud: ", dato[3])
+        print("ruta foto: ", dato[4])
+        print("Texto de wsp: ", dato[5])
+        print("ruta audio: ", dato[6])
+        print("------------------------------------------")  
 
 
 def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:  
@@ -98,75 +99,42 @@ def crearCsv(datos: list) -> None:
     ubicacion: list = []
     matriz:list = [["Timestamp", "Telefono", "Dirección", "Localidad", "Pais", "Patente", "Descripcion_en_txt",  "Descripcion_del_audio"]]
     
-
     for dato in datos:
-            lista:list = []
-            timestamp: str = dato[0]
-            telefono: str = dato[1]
+        lista:list = []
+        timestamp: str = dato[0]
+        telefono: str = dato[1]
                 
-            ubicacion= obtenerDireccion(datos, dato[2], dato[3])
+        ubicacion= obtenerDireccion(datos, dato[2], dato[3])
 
-            direccion: str = ubicacion[0]
-            localidad: str = ubicacion[1] + ', ' +ubicacion[2]
-            pais: str = ubicacion[3]
+        direccion: str = ubicacion[0]
+        localidad: str = ubicacion[1] + ', ' +ubicacion[2]
+        pais: str = ubicacion[3]
 
-            patente: str = 'leerPatente()' 
+        patente: str = 'leerPatente()' 
 
-            descripcion_en_txt: str = dato[5]
+        descripcion_en_txt: str = dato[5]
+        descripcion_del_audio: str = convertirVozATexto(dato[6])
 
-            descripcion_del_audio: str = convertirVozATexto(dato[6])
-
-            lista.append(timestamp)
-            lista.append(telefono)
-            lista.append(direccion)
-            lista.append(localidad)
-            lista.append(pais)
-            lista.append(patente)
-            lista.append(descripcion_en_txt)
-            lista.append(descripcion_del_audio)
-            matriz.append(lista)
+        lista.append(timestamp)
+        lista.append(telefono)
+        lista.append(direccion)
+        lista.append(localidad)
+        lista.append(pais)
+        lista.append(patente)
+        lista.append(descripcion_en_txt)
+        lista.append(descripcion_del_audio)
+        matriz.append(lista)
         
         
-    try:
-        #archivo = open('datosProcesados.csv', 'a')
-        
-        
+    try: 
         with open('datosProcesados.csv', 'w', newline='', encoding="UTF-8") as archivo_csv:
             csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
-
-            csv_writer.writerow(["Timestamp", "Telefono", "Dirección", "Localidad", "Pais", "Patente", "Descripcion_en_txt",  "Descripcion_del_audio"]) 
-            
-            for dato in datos:
-                timestamp: str = dato[0]
-                telefono: str = dato[1]
-                
-                ubicacion= obtenerDireccion(datos, dato[2], dato[3])
-
-                direccion: str = ubicacion[0]
-                localidad: str = ubicacion[1] + ', ' +ubicacion[2]
-                pais: str = ubicacion[3]
-                
-                patente: str = ''
-                descripcion_en_txt: str = ''
-                descripcion_del_audio: str = ''
-            
-                
-
-                csv_writer.writerow((timestamp, telefono, direccion, localidad, pais, patente, descripcion_en_txt, descripcion_del_audio))
-            
-        # with open(“alumnos.csv”, 'w', newline='', encoding="UTF-8") as archivo_csv:
-                # csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
-                # csv_writer.writerow(["Padron", "Nombre", "Apellido"]) #Escribimos el header
-
-                # for padron, nombre_completo in alumnos.items():
-                #     nombre, apellido = nombre_completo
-                #     csv_writer.writerow((padron, nombre, apellido))
-
+            csv_writer.writerows(matriz)
+    
     except IOError: 
         print("No se encontró el archivo")   
-
     except:
-            print("Ocurrio un error inesperado, por favor reintente mas tarde")    
+        print("Ocurrio un error inesperado, por favor reintente mas tarde")    
   
 
 def verSiPerteneceAlRangoDeCoordenadas():
@@ -174,26 +142,26 @@ def verSiPerteneceAlRangoDeCoordenadas():
     pass
 
 
-def verSiEsRobado(listaDeRobados:str, denuncias: str):
+def verSiEsRobado(listaDeRobados:list, denuncias: str):
     
-    autosDenunciados: list = []
     autosRobados: list = []
-    
+    formulario_robados:dict = {}
+    autosDenunciados: list = []
     autosDenunciados = leerCSV(denuncias)
-    autosRobados = leerTxt(listaDeRobados)
-
-    print('autos robados: ',autosRobados)
-    print('----------------------------------------------')
-    print('autos denunciados: ', autosDenunciados)
-    #si esta la misma patente en los dos archivos
-
-<<<<<<< HEAD:punto1.py
-audio_A_texto:list = enviar_rutas_audios(lista)#audios en texto
-print(audio_A_texto)
-=======
-    #debiera devolver si es o no es robado?
-    pass
-
+    
+    #print(autosDenunciados)
+    for auto in autosDenunciados:
+        formulario_robados[auto[5]] = [auto[0], auto[2],auto[3]]
+        
+    for n in listaDeRobados:
+      for key,value in formulario_robados.items():
+        if n == key:
+            print("Ubicación del vehículo: {}".format(value[1]))
+            print("Localidad: {}".format(value[2]))
+            fecha = datetime.fromtimestamp(float(value[0]))#pasat de timestamp a fecha
+            print("Fecha y hora de la denuncia: {}".format(fecha))
+            print("Patente: {}".format(key))
+            print("----------------------------------------------")
 
 def leerTxt(archivo: str) -> list:
     autosRobados: list = []
@@ -225,17 +193,16 @@ def main() -> None:
 
     lista: list =[]
 
-    # lista = leerCSV('Denuncias.csv')   
-    # imprimirCsv(lista) 
+    lista = leerCSV('Denuncias.csv')   
+    #imprimirCsv(lista) 
     #nuevo_csv = crearCsv(lista)
 
-    # robados = leerTxt('robados.txt')
+    robados = leerTxt('robados.txt') #lista
 
-    verSiEsRobado('robados.txt', 'Denuncias.csv')
+    verSiEsRobado(robados, 'datosprocesados.csv')
 
     # print(robados)
 
 main()
 
->>>>>>> a76dfee399975217eb18aff0663cd9d5862f36d6:main.py
 
