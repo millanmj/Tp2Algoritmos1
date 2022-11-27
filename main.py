@@ -17,6 +17,25 @@ import speech_recognition as sr
 
 APIKEY = settings.APIKEY
 
+def menu()-> int:
+    opciones: list[str] = [
+        '1- Procesar archivo de denuncias',
+        '2- Listar todas las infracciones dentro del centro de la ciudad',   
+        '3- Listar los autos infraccionados con pedido de captura',
+        '4- Listar autos infraccionados cercanos a los estadios',
+        '5- Consultar infracciones por patente',
+        '6- Mostrar estadisticas de denuncias'
+    ]
+    
+    print('\n GESTOR DE DENUNCIAS \n')
+
+    for item in opciones:
+        print(item)
+    opcion: int = int(input("\n Ingrese una opción:  ->  "))
+    return opcion
+
+
+
 #2- Con la información leída del archivo CSV, se pide crear un nuevo archivo CSV que contenga los siguientes campos: (Timestamp,Teléfono, Dirección de la infracción, Localidad, Provincia, patente, descripción texto, descripción audio) 
 def leerCSV(archivo: str) -> list:
 
@@ -144,6 +163,7 @@ def verSiPerteneceAlRangoDeCoordenadas():
 
 def verSiEsRobado(listaDeRobados:list, denuncias: str):
     
+    
     autosRobados: list = []
     formulario_robados:dict = {}
     autosDenunciados: list = []
@@ -152,19 +172,24 @@ def verSiEsRobado(listaDeRobados:list, denuncias: str):
     #print(autosDenunciados)
     for auto in autosDenunciados:
         formulario_robados[auto[5]] = [auto[0], auto[2],auto[3]]
-        
+    
+    print("\n LISTA DE VEHICULOS ROBADOS CON DENUNCIA DE INFRACCIÓN \n")
+
     for n in listaDeRobados:
       for key,value in formulario_robados.items():
         if n == key:
+            print("----------------------------------------------")         
+            print("Patente: {}".format(key))
             print("Ubicación del vehículo: {}".format(value[1]))
             print("Localidad: {}".format(value[2]))
             fecha = datetime.fromtimestamp(float(value[0]))#pasat de timestamp a fecha
-            print("Fecha y hora de la denuncia: {}".format(fecha))
-            print("Patente: {}".format(key))
+            print("Fecha y hora de la denuncia: {}".format(fecha))           
             print("----------------------------------------------")
             autosRobados.append([value[1],value[2],fecha,key])
     
-    print(autosRobados)#lista solicitada del punto 5
+    #print(autosRobados)lista solicitada del punto 5
+
+
 def leerTxt(archivo: str) -> list:
     autosRobados: list = []
     try: 
@@ -194,14 +219,20 @@ def Robados(archivoRobados: str, datos: list, ) -> None:
 def main() -> None:
 
     lista: list =[]
-
+    robados: list = []
     lista = leerCSV('Denuncias.csv')   
     #imprimirCsv(lista) 
     #nuevo_csv = crearCsv(lista)
 
-    robados = leerTxt('robados.txt') #lista
 
-    verSiEsRobado(robados, 'datosprocesados.csv')
+    opcion: int= 1
+    while(opcion!= 0):
+        opcion= menu()
+        if (opcion == 1):
+
+            robados = leerTxt('robados.txt') #lista
+
+            verSiEsRobado(robados, 'datosprocesados.csv')
 
     # print(robados)
 
