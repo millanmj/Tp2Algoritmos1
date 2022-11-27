@@ -132,9 +132,6 @@ def crearCsv(datos: list) -> None:
                 #     nombre, apellido = nombre_completo
                 #     csv_writer.writerow((padron, nombre, apellido))
 
-
-
-
     except IOError: 
         print("No se encontró el archivo")   
 
@@ -149,6 +146,6 @@ lista = leerCSV('Denuncias.csv')
 nuevo_csv = crearCsv(lista)
 
 audio_A_texto:list = enviar_rutas_audios(lista)#audios en texto
-
+print(audio_A_texto)
 
 #>>>>>>> 2cc24131f1a57cf6256d78ab3ed01e3d7278a9af
