@@ -162,7 +162,9 @@ def verSiEsRobado(listaDeRobados:list, denuncias: str):
             print("Fecha y hora de la denuncia: {}".format(fecha))
             print("Patente: {}".format(key))
             print("----------------------------------------------")
-
+            autosRobados.append([value[1],value[2],fecha,key])
+    
+    print(autosRobados)#lista solicitada del punto 5
 def leerTxt(archivo: str) -> list:
     autosRobados: list = []
     try: 
