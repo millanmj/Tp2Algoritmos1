@@ -1,5 +1,6 @@
+#pip install python-dotenv (instalen esto para poder usar la apikey)
+
 import csv
-import json
 import os
 
 from geopy.geocoders import Nominatim
@@ -10,7 +11,8 @@ from requests.auth import HTTPBasicAuth
 
 from settings import settings
 import speech_recognition as sr
-r = sr.Recognizer()
+
+#import punto3y4
 
 APIKEY = settings.APIKEY
 
@@ -24,18 +26,6 @@ def leerCSV(archivo: str) -> list:
                 next(csv_reader) 
                 for linea in csv_reader:
                     datos.append(linea)
-
-                for dato in datos:
-                    
-                    print("fecha y hora de la denuncia: ", dato[0])
-                    print("número: ", dato[1])
-                    print("Coordenadas latitud: ",dato[2])
-                    print("Coordenadas longitud: ", dato[3])
-                    print("ruta foto: ", dato[4])
-                    print("Texto de wsp: ", dato[5])
-                    print("ruta audio: ", dato[6])
-                    print("------------------------------------------")       
-
         
     except IOError: 
         print("No se encontró el archivo")   
@@ -44,7 +34,20 @@ def leerCSV(archivo: str) -> list:
             print("Ocurrio un error inesperado, por favor reintente mas tarde")    
 
     return datos
-            
+
+
+def imprimirCsv(datos: list) -> None:
+
+      for dato in datos:                    
+                    print("fecha y hora de la denuncia: ", dato[0])
+                    print("número: ", dato[1])
+                    print("Coordenadas latitud: ",dato[2])
+                    print("Coordenadas longitud: ", dato[3])
+                    print("ruta foto: ", dato[4])
+                    print("Texto de wsp: ", dato[5])
+                    print("ruta audio: ", dato[6])
+                    print("------------------------------------------")  
+
 
 def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:  
 
@@ -63,9 +66,17 @@ def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:
     return data
     
 
-
 def obtenerPatente(rutaImagen: str) -> str:
     pass
+
+
+def convertirVozATexto(ruta_archivo:str) -> str:
+    r = sr.Recognizer()
+    prueba = sr.AudioFile(ruta_archivo)
+    with prueba as source:
+        audio = r.record(source)
+    denuncia = (r.recognize_google(audio,language='es-ES'))
+    return denuncia
 
 
 def enviar_rutas_audios(datos:list):
@@ -81,18 +92,13 @@ def enviar_rutas_audios(datos:list):
     
     return denunciasEnTexto
 
-def convertirVozATexto(ruta_archivo:str) -> str:
-  prueba = sr.AudioFile(ruta_archivo)
-  with prueba as source:
-    audio = r.record(source)
-  denuncia = (r.recognize_google(audio,language='es-ES'))
-  return denuncia
-
 
 def crearCsv(datos: list) -> None:
-
+    audios : list = []
     ubicacion: list = []
     matriz:list = [["Timestamp", "Telefono", "Dirección", "Localidad", "Pais", "Patente", "Descripcion_en_txt",  "Descripcion_del_audio"]]
+    
+
     for dato in datos:
             lista:list = []
             timestamp: str = dato[0]
@@ -103,9 +109,13 @@ def crearCsv(datos: list) -> None:
             direccion: str = ubicacion[0]
             localidad: str = ubicacion[1] + ', ' +ubicacion[2]
             pais: str = ubicacion[3]
-            patente: str = ''
+
+            patente: str = 'leerPatente()' 
+
             descripcion_en_txt: str = dato[5]
-            descripcion_del_audio: str = ''
+
+            descripcion_del_audio: str = convertirVozATexto(dato[6])
+
             lista.append(timestamp)
             lista.append(telefono)
             lista.append(direccion)
@@ -120,10 +130,30 @@ def crearCsv(datos: list) -> None:
     try:
         #archivo = open('datosProcesados.csv', 'a')
         
-        with open('datosProcesados.csv', 'w', newline='') as file:
-            csv_writer = csv.writer(file, delimiter=',')
-            csv_writer.writerows(matriz)
         
+        with open('datosProcesados.csv', 'w', newline='', encoding="UTF-8") as archivo_csv:
+            csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
+
+            csv_writer.writerow(["Timestamp", "Telefono", "Dirección", "Localidad", "Pais", "Patente", "Descripcion_en_txt",  "Descripcion_del_audio"]) 
+            
+            for dato in datos:
+                timestamp: str = dato[0]
+                telefono: str = dato[1]
+                
+                ubicacion= obtenerDireccion(datos, dato[2], dato[3])
+
+                direccion: str = ubicacion[0]
+                localidad: str = ubicacion[1] + ', ' +ubicacion[2]
+                pais: str = ubicacion[3]
+                
+                patente: str = ''
+                descripcion_en_txt: str = ''
+                descripcion_del_audio: str = ''
+            
+                
+
+                csv_writer.writerow((timestamp, telefono, direccion, localidad, pais, patente, descripcion_en_txt, descripcion_del_audio))
+            
         # with open(“alumnos.csv”, 'w', newline='', encoding="UTF-8") as archivo_csv:
                 # csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
                 # csv_writer.writerow(["Padron", "Nombre", "Apellido"]) #Escribimos el header
@@ -136,16 +166,76 @@ def crearCsv(datos: list) -> None:
         print("No se encontró el archivo")   
 
     except:
-        print("Ocurrio un error inesperado, por favor reintente mas tarde")    
+            print("Ocurrio un error inesperado, por favor reintente mas tarde")    
   
 
+def verSiPerteneceAlRangoDeCoordenadas():
+
+    pass
 
 
+def verSiEsRobado(listaDeRobados:str, denuncias: str):
+    
+    autosDenunciados: list = []
+    autosRobados: list = []
+    
+    autosDenunciados = leerCSV(denuncias)
+    autosRobados = leerTxt(listaDeRobados)
 
-lista = leerCSV('Denuncias.csv')
-nuevo_csv = crearCsv(lista)
+    print('autos robados: ',autosRobados)
+    print('----------------------------------------------')
+    print('autos denunciados: ', autosDenunciados)
+    #si esta la misma patente en los dos archivos
 
+<<<<<<< HEAD:punto1.py
 audio_A_texto:list = enviar_rutas_audios(lista)#audios en texto
 print(audio_A_texto)
+=======
+    #debiera devolver si es o no es robado?
+    pass
 
-#>>>>>>> 2cc24131f1a57cf6256d78ab3ed01e3d7278a9af
+
+def leerTxt(archivo: str) -> list:
+    autosRobados: list = []
+    try: 
+        with open(archivo, 'r') as robados:
+            for auto in robados:               
+                autosRobados.append(auto.strip('\n'))
+        
+    except IOError: 
+        print("No se encontró el archivo")   
+
+    except:
+        print("Ocurrio un error inesperado, por favor reintente mas tarde") 
+    
+    
+    return autosRobados
+
+
+def Robados(archivoRobados: str, datos: list, ) -> None:
+
+    autosRobados = leerTxt(archivoRobados)
+
+    #datosProcesados: list = leerProcesados() 
+
+    pass
+
+
+def main() -> None:
+
+    lista: list =[]
+
+    # lista = leerCSV('Denuncias.csv')   
+    # imprimirCsv(lista) 
+    #nuevo_csv = crearCsv(lista)
+
+    # robados = leerTxt('robados.txt')
+
+    verSiEsRobado('robados.txt', 'Denuncias.csv')
+
+    # print(robados)
+
+main()
+
+>>>>>>> a76dfee399975217eb18aff0663cd9d5862f36d6:main.py
+

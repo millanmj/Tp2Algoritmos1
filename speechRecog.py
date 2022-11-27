@@ -23,8 +23,7 @@ def main():
  print(denuncia_1)
  denuncia_2:str = audio_a_texto(".\\Audios_denuncias\\denuncia2.wav")
  print(denuncia_2)
- denuncia_3:str =audio_a_texto(".\\Audios_denuncias\\denuncia3.wav")
-
+ denuncia_3:str = audio_a_texto(".\\Audios_denuncias\\denuncia3.wav")
  print(denuncia_3)
  denuncia_4:str = audio_a_texto(".\\Audios_denuncias\\denuncia4.wav")
  print(denuncia_4)

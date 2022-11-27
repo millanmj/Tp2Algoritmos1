@@ -2,6 +2,7 @@ from datetime import datetime
 def mostrar_timestamp (fecha) -> None:
     print(("timestamp is: ",fecha))
 
+#CREACIÓN DE REGISTROS DE TIEMPO PARA DENUNCIAS
 
 def main():
     fecha_1 = datetime(2022,11,5,15,23,20)
@@ -47,5 +48,13 @@ def main():
     fecha_11 = datetime(2022,11,12,20,54,10)
     ts_11 = datetime.timestamp(fecha_11)
     denuncia11 = mostrar_timestamp(ts_11)
+
+
+    
+
+
+
+
+
 
 main()
