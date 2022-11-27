@@ -40,8 +40,6 @@ def menu()-> int:
     return opcion
 
 
-
-#2- Con la información leída del archivo CSV, se pide crear un nuevo archivo CSV que contenga los siguientes campos: (Timestamp,Teléfono, Dirección de la infracción, Localidad, Provincia, patente, descripción texto, descripción audio) 
 def leerCSV(archivo: str) -> list:
 
     try:
@@ -61,6 +59,23 @@ def leerCSV(archivo: str) -> list:
     return datos
 
 
+def leerTxt(archivo: str) -> list:
+    autosRobados: list = []
+    try: 
+        with open(archivo, 'r') as robados:
+            for auto in robados:               
+                autosRobados.append(auto.strip('\n'))
+        
+    except IOError: 
+        print("No se encontró el archivo")   
+
+    except:
+        print("Ocurrio un error inesperado, por favor reintente mas tarde") 
+    
+    
+    return autosRobados
+
+
 def imprimirCsv(datos: list) -> None:
 
     for dato in datos:                    
@@ -72,6 +87,49 @@ def imprimirCsv(datos: list) -> None:
         print("Texto de wsp: ", dato[5])
         print("ruta audio: ", dato[6])
         print("------------------------------------------")  
+
+
+def crearCsv(datos: list) -> None:
+    audios : list = []
+    ubicacion: list = []
+    matriz:list = [["Timestamp", "Telefono", "Dirección", "Localidad", "Pais", "Patente", "Descripcion_en_txt",  "Descripcion_del_audio"]]
+    
+    for dato in datos:
+        lista:list = []
+        timestamp: str = dato[0]
+        telefono: str = dato[1]
+                
+        ubicacion= obtenerDireccion(datos, dato[2], dato[3])
+
+        direccion: str = ubicacion[0]
+        localidad: str = ubicacion[1] + ', ' +ubicacion[2]
+        pais: str = ubicacion[3]
+
+        patente: str = 'leerPatente()' 
+
+        descripcion_en_txt: str = dato[5]
+        descripcion_del_audio: str = convertirVozATexto(dato[6])
+
+        lista.append(timestamp)
+        lista.append(telefono)
+        lista.append(direccion)
+        lista.append(localidad)
+        lista.append(pais)
+        lista.append(patente)
+        lista.append(descripcion_en_txt)
+        lista.append(descripcion_del_audio)
+        matriz.append(lista)
+        
+        
+    try: 
+        with open('datosProcesados.csv', 'w', newline='', encoding="UTF-8") as archivo_csv:
+            csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
+            csv_writer.writerows(matriz)
+    
+    except IOError: 
+        print("No se encontró el archivo")   
+    except:
+        print("Ocurrio un error inesperado, por favor reintente mas tarde")    
 
 
 def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:  
@@ -118,51 +176,6 @@ def enviar_rutas_audios(datos:list):
     return denunciasEnTexto
 
 
-def crearCsv(datos: list) -> None:
-    audios : list = []
-    ubicacion: list = []
-    matriz:list = [["Timestamp", "Telefono", "Dirección", "Localidad", "Pais", "Patente", "Descripcion_en_txt",  "Descripcion_del_audio"]]
-    
-    for dato in datos:
-        lista:list = []
-        timestamp: str = dato[0]
-        telefono: str = dato[1]
-                
-        ubicacion= obtenerDireccion(datos, dato[2], dato[3])
-
-        direccion: str = ubicacion[0]
-        localidad: str = ubicacion[1] + ', ' +ubicacion[2]
-        pais: str = ubicacion[3]
-
-        patente: str = 'leerPatente()' 
-
-        descripcion_en_txt: str = dato[5]
-        descripcion_del_audio: str = convertirVozATexto(dato[6])
-
-        lista.append(timestamp)
-        lista.append(telefono)
-        lista.append(direccion)
-        lista.append(localidad)
-        lista.append(pais)
-        lista.append(patente)
-        lista.append(descripcion_en_txt)
-        lista.append(descripcion_del_audio)
-        matriz.append(lista)
-        
-        
-    try: 
-        with open('datosProcesados.csv', 'w', newline='', encoding="UTF-8") as archivo_csv:
-            csv_writer = csv.writer(archivo_csv, delimiter=',', quotechar='"', quoting= csv.QUOTE_NONNUMERIC)
-            csv_writer.writerows(matriz)
-    
-    except IOError: 
-        print("No se encontró el archivo")   
-    except:
-        print("Ocurrio un error inesperado, por favor reintente mas tarde")    
-  
-# 6- Permitir el ingreso de una patente y mostrar la fotografía asociada a la misma y un 
-# mapa de google con la ubicación de la misma marcada con un punto. 
-
 def verSiPerteneceAlRangoDeCoordenadas():
 
     pass
@@ -193,23 +206,6 @@ def verSiEsRobado(listaDeRobados:list, denuncias: str) -> None:
             print("Fecha y hora de la denuncia: {}".format(fecha))           
             print("----------------------------------------------")
             autosRobados.append([value[1],value[2],fecha,key])
-
-
-def leerTxt(archivo: str) -> list:
-    autosRobados: list = []
-    try: 
-        with open(archivo, 'r') as robados:
-            for auto in robados:               
-                autosRobados.append(auto.strip('\n'))
-        
-    except IOError: 
-        print("No se encontró el archivo")   
-
-    except:
-        print("Ocurrio un error inesperado, por favor reintente mas tarde") 
-    
-    
-    return autosRobados
 
 
 def consultarPatente(archivo1: str, archivo2: str) -> None:
@@ -250,11 +246,13 @@ def consultarPatente(archivo1: str, archivo2: str) -> None:
         
     print('esta la consulta', consulta)
 
+
 def main() -> None:
 
     lista: list =[]
     robados: list = []
     lista = leerCSV('Denuncias.csv')   
+   
     #imprimirCsv(lista) 
     #nuevo_csv = crearCsv(lista)
 
@@ -267,7 +265,7 @@ def main() -> None:
         if (opcion == 1):
             print('1- Procesar archivo de denuncias')
             lista = leerCSV('Denuncias.csv') 
-            nuevo_csv = crearCsv(lista)
+            crearCsv(lista)
             print('Su archivo de denuncias ha sido procesado correctamente')   
 
         elif (opcion == 2):     
