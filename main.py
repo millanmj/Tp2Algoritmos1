@@ -13,6 +13,10 @@ from requests.auth import HTTPBasicAuth
 from settings import settings
 import speech_recognition as sr
 
+import webbrowser
+import cv2
+
+
 #import punto3y4
 
 APIKEY = settings.APIKEY
@@ -24,7 +28,8 @@ def menu()-> int:
         '3- Listar los autos infraccionados con pedido de captura',
         '4- Listar autos infraccionados cercanos a los estadios',
         '5- Consultar infracciones por patente',
-        '6- Mostrar estadisticas de denuncias'
+        '6- Mostrar estadisticas de denuncias',
+        '7- Ingrese 0 para salir'
     ]
     
     print('\n GESTOR DE DENUNCIAS \n')
@@ -155,13 +160,15 @@ def crearCsv(datos: list) -> None:
     except:
         print("Ocurrio un error inesperado, por favor reintente mas tarde")    
   
+# 6- Permitir el ingreso de una patente y mostrar la fotografía asociada a la misma y un 
+# mapa de google con la ubicación de la misma marcada con un punto. 
 
 def verSiPerteneceAlRangoDeCoordenadas():
 
     pass
 
 
-def verSiEsRobado(listaDeRobados:list, denuncias: str):
+def verSiEsRobado(listaDeRobados:list, denuncias: str) -> None:
     
     
     autosRobados: list = []
@@ -186,8 +193,6 @@ def verSiEsRobado(listaDeRobados:list, denuncias: str):
             print("Fecha y hora de la denuncia: {}".format(fecha))           
             print("----------------------------------------------")
             autosRobados.append([value[1],value[2],fecha,key])
-    
-    #print(autosRobados)lista solicitada del punto 5
 
 
 def leerTxt(archivo: str) -> list:
@@ -207,14 +212,43 @@ def leerTxt(archivo: str) -> list:
     return autosRobados
 
 
-def Robados(archivoRobados: str, datos: list, ) -> None:
+def consultarPatente(archivo1: str, archivo2: str) -> None:
 
-    autosRobados = leerTxt(archivoRobados)
+    consulta: dict = {'timestamp': '', 'latitud':'' , 'longitud': '', 'patente': '', 'rutaImagen':''}
+    denuncias: list = []
+    datosProcesados: list = []
 
-    #datosProcesados: list = leerProcesados() 
+    patente: str = input('Ingrese la patente que desea consultar: ')
+    consulta['patente'] = patente
+    
 
-    pass
+    #Hay que obtener la latitud, la longitud, y la ruta de la imagen
+    denuncias= leerCSV(archivo1)
 
+    #hay que obtener la patente
+    datosProcesados= leerCSV(archivo2)
+    
+    for dato in datosProcesados:
+        if (dato[5] == patente):
+            consulta['patente'] = dato[5]
+            consulta['timestamp'] = dato[0]                       
+    
+    for dato in denuncias:
+        if (consulta['timestamp'] == dato[0]):
+            consulta['latitud'] = dato[2]
+            consulta['longitud'] = dato[3]
+            consulta['rutaImagen'] = dato[4]
+
+    #Abrimos la ubicación en el navegador
+    webbrowser.open('https://maps.google.com/?q='+ consulta['latitud'] +','+ consulta['longitud'], new=2, autoraise=True)
+
+    imagen = cv2.imread(consulta['rutaImagen']) 
+    cv2.imshow('Patente consultada',imagen)
+    cv2.waitKey(0)
+
+    #cv2.destroyAllWindows()
+        
+    print('esta la consulta', consulta)
 
 def main() -> None:
 
@@ -226,15 +260,43 @@ def main() -> None:
 
 
     opcion: int= 1
+
     while(opcion!= 0):
         opcion= menu()
+
         if (opcion == 1):
+            print('1- Procesar archivo de denuncias')
+            lista = leerCSV('Denuncias.csv') 
+            nuevo_csv = crearCsv(lista)
+            print('Su archivo de denuncias ha sido procesado correctamente')   
 
+        elif (opcion == 2):     
+            print('2- Listar todas las infracciones dentro del centro de la ciudad')    
+
+        elif (opcion == 3):
+            print('3- Listar los autos infraccionados con pedido de captura')
             robados = leerTxt('robados.txt') #lista
-
             verSiEsRobado(robados, 'datosprocesados.csv')
 
+        elif (opcion == 4):
+            print('4- Listar autos infraccionados cercanos a los estadios')
+        elif (opcion == 5):
+            print('5- Consultar infracciones por patente')
+            consultarPatente('denuncias.csv', 'datosProcesados.csv')
+
+        elif (opcion == 6):
+            print('6- Mostrar estadisticas de denuncias')
+        
+        else: exit()
+   
     # print(robados)
+
+        print('1- Procesar archivo de denuncias')
+         
+        
+        
+        
+        
 
 main()
 
