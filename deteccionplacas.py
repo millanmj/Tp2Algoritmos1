@@ -84,8 +84,10 @@ def reconocer_patente(ruta_foto: str):
     #####################################################
     if (patente_validada == False):
         data = 'AA 000 AA'
+    else:
+        data = data.replace("\n", "")       
     
-    return str(data)        
+    return data 
                         
               # cv2.imshow('Placa', placa)
                 # cv2.imshow('thresh', thresh)
