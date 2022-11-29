@@ -21,6 +21,15 @@ import cv2
 
 APIKEY = settings.APIKEY
 
+#FUNCION PARA BORRAR
+def cls() -> None:
+    command = 'clear'
+
+    if os.name in ('nt', 'dos'):
+        command = 'cls'
+
+    os.system(command)
+
 def menu()-> int:
     opciones: list[str] = [
         '1- Procesar archivo de denuncias',
@@ -247,6 +256,17 @@ def consultarPatente(archivo1: str, archivo2: str) -> None:
     print('esta la consulta', consulta)
 
 
+def analizarEstadisticas(archivo: str) -> dict:
+    
+    estadistica: dict = {}
+    datosProcesdos: list = []
+
+    datosProcesdos = leerCSV(archivo)
+    
+
+
+    return estadistica
+
 def main() -> None:
 
     lista: list =[]
@@ -278,6 +298,7 @@ def main() -> None:
 
         elif (opcion == 4):
             print('4- Listar autos infraccionados cercanos a los estadios')
+            
         elif (opcion == 5):
             print('5- Consultar infracciones por patente')
             consultarPatente('denuncias.csv', 'datosProcesados.csv')
@@ -289,7 +310,6 @@ def main() -> None:
    
     # print(robados)
 
-        print('1- Procesar archivo de denuncias')
          
         
         
