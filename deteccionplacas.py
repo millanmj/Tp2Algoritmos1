@@ -3,11 +3,13 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 import pytesseract
+# from darkflow.net.build import TFNet
 
 pytesseract.pytesseract.tesseract_cmd = (f'C:\\Users\\Agustin\\AppData\\Local\\Tesseract-OCR\\tesseract.exe')
 
-def validar_patente(data: str, thresh) -> bool:
 
+def validar_patente(data: str, thresh) -> bool:
+    
     patente_validada:bool = False
     contador:int = 0
     if len(data) == 10:
@@ -27,89 +29,67 @@ def validar_patente(data: str, thresh) -> bool:
                 contador += 1
 
         if contador == 7:
-            patente_validada = True 
+            patente_validada = True
+
+    # if patente_validada == True:
+    #     print(data)
         
-    if patente_validada == True:
-        print(data)
+    return patente_validada
 
-def plot_image(img, grayscale=True):
 
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)#Este pasa la foto a blanco y negro   me fije en el git del tipo que vimos y tiene esto
-    gray = cv2.blur(gray,(3,3))#le pone el efecto blur 
-    canny = cv2.Canny(gray,150,200)#Este es para pasarlo todo a blanco y negro completamente 
-    canny = cv2.dilate(canny,None,iterations=1)#Aca esta el problema, texto, cambia el grosor algunas funcionan con 1 y otras con 2 y 3
-    cnts,_ = cv2.findContours(canny, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    # cv2.drawContours(img,cnts,-1,(0,255,0),2)
+def reconocer_patente(ruta_foto: str):
+    
+    img = cv2.imread(ruta_foto) 
+    #grayscale = False
+    patente_validada = False
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.blur(gray,(3,3))
+    canny = cv2.Canny(gray,150,200)
+    
+    valor_iteracion = 1
+    while((valor_iteracion < 6) and (patente_validada == False)):
+    #####################################################
+        canny = cv2.dilate(canny,None,iterations = valor_iteracion)
+        cnts,_ = cv2.findContours(canny, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        # cv2.drawContours(img,cnts,-1,(0,255,0),2)
 
-    for c in cnts:
-        area = cv2.contourArea(c)
-        x,y,w,h = cv2.boundingRect(c)
-        epsilon = 0.09*cv2.arcLength(c,True)
-        approx = cv2.approxPolyDP(c,epsilon,True)
-        if len(approx)==4 and area > 2000:
-            # print('area=', area)
-            cv2.drawContours(img,[c],0,(0,255,0),2)
-            license_ratio = float(w)/h
-            if license_ratio > 1.4:
-                placa = gray[y:y+h,x:x+w]
-                placa = cv2.resize(placa, None, fx=5, fy=5)
-                sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
-                sharpen = cv2.filter2D(placa, -1, sharpen_kernel)
-                thresh = cv2.threshold(sharpen, 0, 255, cv2.THRESH_OTSU)[1] 
-                data = pytesseract.image_to_string(thresh, config='--psm 6')#Aca hay otro problema, pasa lo mismo con iteration pero esta vez con el config         
-                validar_patente(data, thresh)
-                
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)#Este pasa la foto a blanco y negro   me fije en el git del tipo que vimos y tiene esto
-    gray = cv2.blur(gray,(3,3))#le pone el efecto blur 
-    canny = cv2.Canny(gray,150,200)#Este es para pasarlo todo a blanco y negro completamente 
-    canny = cv2.dilate(canny,None,iterations=2)#Aca esta el problema, texto, cambia el grosor algunas funcionan con 1 y otras con 2 y 3
-    cnts,_ = cv2.findContours(canny, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    # cv2.drawContours(img,cnts,-1,(0,255,0),2)
+        for c in cnts:
+            area = cv2.contourArea(c)
+            x,y,w,h = cv2.boundingRect(c)
+            epsilon = 0.09*cv2.arcLength(c,True)
+            approx = cv2.approxPolyDP(c,epsilon,True)
+            if len(approx)==4 and area > 2000:
+                # print('area=', area)
+                cv2.drawContours(img,[c],0,(0,255,0),2)
+                license_ratio = float(w)/h
+                if license_ratio > 1.4:
+                    placa = gray[y:y+h,x:x+w]
+                    placa = cv2.resize(placa, None, fx=5, fy=5)
+                    sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
+                    sharpen = cv2.filter2D(placa, -1, sharpen_kernel)
+                    thresh = cv2.threshold(sharpen, 0, 255, cv2.THRESH_OTSU)[1]
 
-    for c in cnts:
-        area = cv2.contourArea(c)
-        x,y,w,h = cv2.boundingRect(c)
-        epsilon = 0.09*cv2.arcLength(c,True)
-        approx = cv2.approxPolyDP(c,epsilon,True)
-        if len(approx)==4 and area > 2000:
-            # print('area=', area)
-            cv2.drawContours(img,[c],0,(0,255,0),2)
-            license_ratio = float(w)/h
-            if license_ratio > 1.4:
-                placa = gray[y:y+h,x:x+w]
-                placa = cv2.resize(placa, None, fx=5, fy=5)
-                sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
-                sharpen = cv2.filter2D(placa, -1, sharpen_kernel)
-                thresh = cv2.threshold(sharpen, 0, 255, cv2.THRESH_OTSU)[1] 
-                data = pytesseract.image_to_string(thresh, config='--psm 6')#Aca hay otro problema, pasa lo mismo con iteration pero esta vez con el config         
-                validar_patente(data, thresh)   
+                    data = pytesseract.image_to_string(thresh, config='--psm 6')        
+                    configuracion = 7
+                    patente_validada = validar_patente(data, thresh)
 
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)#Este pasa la foto a blanco y negro   me fije en el git del tipo que vimos y tiene esto
-    gray = cv2.blur(gray,(3,3))#le pone el efecto blur 
-    canny = cv2.Canny(gray,150,200)#Este es para pasarlo todo a blanco y negro completamente 
-    canny = cv2.dilate(canny,None,iterations=3)#Aca esta el problema, texto, cambia el grosor algunas funcionan con 1 y otras con 2 y 3
-    cnts,_ = cv2.findContours(canny, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    # cv2.drawContours(img,cnts,-1,(0,255,0),2)
-
-    for c in cnts:
-        area = cv2.contourArea(c)
-        x,y,w,h = cv2.boundingRect(c)
-        epsilon = 0.09*cv2.arcLength(c,True)
-        approx = cv2.approxPolyDP(c,epsilon,True)
-        if len(approx)==4 and area > 2000:
-            # print('area=', area)
-            cv2.drawContours(img,[c],0,(0,255,0),2)
-            license_ratio = float(w)/h
-            if license_ratio > 1.4:
-                placa = gray[y:y+h,x:x+w]
-                placa = cv2.resize(placa, None, fx=5, fy=5)
-                sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
-                sharpen = cv2.filter2D(placa, -1, sharpen_kernel)
-                thresh = cv2.threshold(sharpen, 0, 255, cv2.THRESH_OTSU)[1] 
-                data = pytesseract.image_to_string(thresh, config='--psm 6')#Aca hay otro problema, pasa lo mismo con iteration pero esta vez con el config         
-                validar_patente(data, thresh) 
-
-                # cv2.imshow('Placa', placa)
+                    while ((patente_validada == False) and (configuracion < 14)):
+                        # print('valor de configuracion: ',configuracion)
+                        data = pytesseract.image_to_string(thresh, config=f'--psm {configuracion}')
+                        patente_validada = validar_patente(data, thresh)
+                        configuracion += 1
+        # print('valor de iteración:',valorDeIteracion)
+        valor_iteracion += 1
+        
+    #####################################################
+    if (patente_validada == False):
+        data = 'AA 000 AA'
+    else:
+        data = data.replace("\n", "")       
+    
+    return data 
+                        
+              # cv2.imshow('Placa', placa)
                 # cv2.imshow('thresh', thresh)
                 # cv2.imshow('sharpen', sharpen)
 
@@ -118,9 +98,51 @@ def plot_image(img, grayscale=True):
     # cv2.moveWindow('Image',45,10)
     # cv2.waitKey(0)
 
-def main():
+# def main():
 
-    img = cv2.imread(f"C:\\Users\\Agustin\\Desktop\\Tp2Algoritmos1\\Imagenes_autos\\001.png")
-    plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\000.png")
+#     # plot_image(img, False)
+    # img = cv2.imread(".\\Imagenes_autos\\001.png")
+    # reconocer_patente(img)
+#     #   img = cv2.imread(".\\Imagenes_autos\\002.png")
+#     #   reconocer_patente(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\003.png")
+#     # plot_image(img, False)
+#     img = cv2.imread(".\\Imagenes_autos\\004.png")
+#     plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\005.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\006.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\007.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\008.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\009.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\010.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\011.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\012.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\013.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\014.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\015.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\016.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\017.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\018.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\019.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\020.png")
+#     # plot_image(img, False)
+#     # img = cv2.imread(".\\Imagenes_autos\\021.png")
+#     # plot_image(img, False)
 
-main()
+# main()
