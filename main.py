@@ -16,10 +16,22 @@ import speech_recognition as sr
 import webbrowser
 import cv2
 
+from deteccionplacas import reconocer_patente
+
 
 #import punto3y4
 
 APIKEY = settings.APIKEY
+
+
+#FUNCION PARA BORRAR
+def cls() -> None:
+    command = 'clear'
+
+    if os.name in ('nt', 'dos'):
+        command = 'cls'
+
+    os.system(command)
 
 def menu()-> int:
     opciones: list[str] = [
@@ -54,7 +66,7 @@ def leerCSV(archivo: str) -> list:
         print("No se encontró el archivo")   
 
     except:
-            print("Ocurrio un error inesperado, por favor reintente mas tarde")    
+        print("Ocurrio un error inesperado, por favor reintente mas tarde")    
 
     return datos
 
@@ -105,7 +117,7 @@ def crearCsv(datos: list) -> None:
         localidad: str = ubicacion[1] + ', ' +ubicacion[2]
         pais: str = ubicacion[3]
 
-        patente: str = 'leerPatente()' 
+        patente: str = str(reconocer_patente(dato[4]))
 
         descripcion_en_txt: str = dato[5]
         descripcion_del_audio: str = convertirVozATexto(dato[6])
@@ -149,8 +161,6 @@ def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:
     return data
     
 
-def obtenerPatente(rutaImagen: str) -> str:
-    pass
 
 
 def convertirVozATexto(ruta_archivo:str) -> str:
@@ -202,7 +212,7 @@ def verSiEsRobado(listaDeRobados:list, denuncias: str) -> None:
             print("Patente: {}".format(key))
             print("Ubicación del vehículo: {}".format(value[1]))
             print("Localidad: {}".format(value[2]))
-            fecha = datetime.fromtimestamp(float(value[0]))#pasat de timestamp a fecha
+            fecha = datetime.fromtimestamp(float(value[0]))#pasar de timestamp a fecha
             print("Fecha y hora de la denuncia: {}".format(fecha))           
             print("----------------------------------------------")
             autosRobados.append([value[1],value[2],fecha,key])
@@ -265,6 +275,7 @@ def main() -> None:
         if (opcion == 1):
             print('1- Procesar archivo de denuncias')
             lista = leerCSV('Denuncias.csv') 
+            print('Aguarde por favor, su archivo esta siendo procesado')
             crearCsv(lista)
             print('Su archivo de denuncias ha sido procesado correctamente')   
 
@@ -289,7 +300,7 @@ def main() -> None:
    
     # print(robados)
 
-        print('1- Procesar archivo de denuncias')
+        
          
         
         
