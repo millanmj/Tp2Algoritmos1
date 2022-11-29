@@ -18,8 +18,7 @@ import cv2
 
 from deteccionplacas import reconocer_patente
 
-
-#import punto3y4
+from punto3y4 import boca
 
 APIKEY = settings.APIKEY
 
@@ -185,11 +184,22 @@ def enviar_rutas_audios(datos:list):
     
     return denunciasEnTexto
 
-
-def verSiPerteneceAlRangoDeCoordenadas():
+def verSiPerteneceAlRangoDeCoordenadas(denuncias: str):
 
     pass
 
+def verSiEsCercanoALosEstadios(denuncias: str):
+
+    autosCercanos: list = []
+    autosCercanos = leerCSV(denuncias)
+
+    # print(autosCercanos)
+    for auto in autosCercanos:
+        latitud: float = auto[2]
+        longitud: float = auto[3]
+        boca(latitud, longitud)
+        if boca(latitud, longitud) == True:
+            print(f"El auto ... se encuentra cerca en el punto {latitud} , {longitud}")
 
 def verSiEsRobado(listaDeRobados:list, denuncias: str) -> None:
     
@@ -280,7 +290,8 @@ def main() -> None:
             print('Su archivo de denuncias ha sido procesado correctamente')   
 
         elif (opcion == 2):     
-            print('2- Listar todas las infracciones dentro del centro de la ciudad')    
+            print('2- Listar todas las infracciones dentro del centro de la ciudad') 
+            verSiPerteneceAlRangoDeCoordenadas('Denuncias.csv')   
 
         elif (opcion == 3):
             print('3- Listar los autos infraccionados con pedido de captura')
@@ -289,6 +300,8 @@ def main() -> None:
 
         elif (opcion == 4):
             print('4- Listar autos infraccionados cercanos a los estadios')
+            verSiEsCercanoALosEstadios('Denuncias.csv')
+            
         elif (opcion == 5):
             print('5- Consultar infracciones por patente')
             consultarPatente('denuncias.csv', 'datosProcesados.csv')
