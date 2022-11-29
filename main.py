@@ -19,6 +19,7 @@ import cv2
 from deteccionplacas import reconocer_patente
 
 from punto3y4 import boca
+from punto3y4 import river
 
 APIKEY = settings.APIKEY
 
@@ -188,18 +189,34 @@ def verSiPerteneceAlRangoDeCoordenadas(denuncias: str):
 
     pass
 
-def verSiEsCercanoALosEstadios(denuncias: str):
+def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str):
 
+    autosCoordenadas: list = []
+    autosCoordenadas = leerCSV(denuncias)
     autosCercanos: list = []
-    autosCercanos = leerCSV(denuncias)
+    autosCercanos = leerCSV(datosprocesados)
 
-    # print(autosCercanos)
-    for auto in autosCercanos:
-        latitud: float = auto[2]
-        longitud: float = auto[3]
+    print("\nAutos cercanos al estadio de Boca: \n")
+    
+    for dato in autosCoordenadas:
+        for i in autosCercanos:
+            patente: str = i[5]
+        latitud = float(dato[2])
+        longitud = float(dato[3])
         boca(latitud, longitud)
         if boca(latitud, longitud) == True:
-            print(f"El auto ... se encuentra cerca en el punto {latitud} , {longitud}")
+            print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
+
+    print("\nAutos cercanos al estadio de River: \n")
+
+    for dato in autosCoordenadas:
+        for i in autosCercanos:
+            patente: str = i[5]
+        latitud = float(dato[2])
+        longitud = float(dato[3])
+        river(latitud, longitud)
+        if boca(latitud, longitud) == True:
+            print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
 
 def verSiEsRobado(listaDeRobados:list, denuncias: str) -> None:
     
@@ -300,8 +317,8 @@ def main() -> None:
 
         elif (opcion == 4):
             print('4- Listar autos infraccionados cercanos a los estadios')
-            verSiEsCercanoALosEstadios('Denuncias.csv')
-            
+            verSiEsCercanoALosEstadios('Denuncias.csv', 'datosProcesados.csv')
+
         elif (opcion == 5):
             print('5- Consultar infracciones por patente')
             consultarPatente('denuncias.csv', 'datosProcesados.csv')
