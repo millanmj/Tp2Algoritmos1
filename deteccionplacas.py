@@ -5,6 +5,11 @@ import matplotlib.pyplot as plt
 import pytesseract
 # from darkflow.net.build import TFNet
 
+#Importaciones para la api plate recognizer
+import requests
+from pprint import pprint
+import json
+
 pytesseract.pytesseract.tesseract_cmd = (f'C:\\Users\\Agustin\\AppData\\Local\\Tesseract-OCR\\tesseract.exe')
 
 
@@ -98,51 +103,22 @@ def reconocer_patente(ruta_foto: str):
     # cv2.moveWindow('Image',45,10)
     # cv2.waitKey(0)
 
-# def main():
+##############################################
+def consultaApiPatente(patente: str) -> str:
+    regions = ['mx', 'us-ca'] # Change to your country
+    with open('/path/to/car.jpg', 'rb') as fp:
+        response = requests.post(
+            'https://api.platerecognizer.com/v1/plate-reader/',
+            data=dict(regions=regions),  # Optional
+            files=dict(upload=fp),
+            headers={'Authorization': 'Token my-token******'})
+    pprint(response.json())
 
-#     # img = cv2.imread(".\\Imagenes_autos\\000.png")
-#     # plot_image(img, False)
-    # img = cv2.imread(".\\Imagenes_autos\\001.png")
-    # reconocer_patente(img)
-#     #   img = cv2.imread(".\\Imagenes_autos\\002.png")
-#     #   reconocer_patente(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\003.png")
-#     # plot_image(img, False)
-#     img = cv2.imread(".\\Imagenes_autos\\004.png")
-#     plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\005.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\006.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\007.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\008.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\009.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\010.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\011.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\012.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\013.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\014.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\015.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\016.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\017.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\018.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\019.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\020.png")
-#     # plot_image(img, False)
-#     # img = cv2.imread(".\\Imagenes_autos\\021.png")
-#     # plot_image(img, False)
+    # Calling with a custom engine configuration
 
-# main()
+    with open('/path/to/car.jpg', 'rb') as fp:
+        response = requests.post(
+            'https://api.platerecognizer.com/v1/plate-reader/',
+            data=dict(regions=['us-ca'], config=json.dumps(dict(region="strict"))),  # Optional
+            files=dict(upload=fp),
+            headers={'Authorization': 'Token my-token******'})
