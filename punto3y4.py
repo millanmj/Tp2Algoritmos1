@@ -4,31 +4,21 @@ def haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """
     Formula del semiverseno: Calcula la distancia en kilometros entre 2 puntos de la tierra
     """
-    # convertir grados a radianes 
+    # convertir grados a radianes
     lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
 
-    dlon = lon2 - lon1 
-    dlat = lat2 - lat1 
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
     a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-    c = 2 * asin(sqrt(a)) 
+    c = 2 * asin(sqrt(a))
     r = 6371 # Radio de la tierra en km
     return c * r
 
-def boca(latitud: float, longitud: float) -> bool:
+def cercano_al_estadio(latitud1: float, longitud1: float, latitud2: float, longitud2: float) -> bool:
     """
-    Devuelve True si la distancia del punto a la cancha de Boca es menor a 1km
+    Devuelve True si la distancia del auto al estadio es menor a 1km
     """
-    distancia: float = haversine(-34.635614, -58.364669, latitud, longitud)
-    if distancia < 1.0:
-        return True
-    else:
-        return False
-
-def river(latitud: float, longitud: float) -> bool:
-    """
-    Devuelve True si la distancia del punto a la cancha de River es menor a 1km
-    """
-    distancia: float = haversine(-34.545290, -58.449740, latitud, longitud)
+    distancia: float = haversine(latitud1, longitud1, latitud2, longitud2)
     if distancia < 1.0:
         return True
     else:

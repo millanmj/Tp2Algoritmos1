@@ -208,6 +208,8 @@ def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str):
     autosCoordenadas = leerCSV(denuncias)
     autosCercanos: list = []
     autosCercanos = leerCSV(datosprocesados)
+    boca: tuple = (-34.635614, -58.364669)
+    river: tuple = (-34.545290, -58.449740)
 
     print("\nAutos cercanos al estadio de Boca: \n")
     
@@ -216,7 +218,7 @@ def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str):
             patente: str = i[5]
         latitud = float(dato[2])
         longitud = float(dato[3])
-        if boca(latitud, longitud) == True:
+        if cercano_al_estadio(boca[0], boca[1], latitud, longitud) == True:
             print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
 
     print("\nAutos cercanos al estadio de River: \n")
@@ -226,7 +228,7 @@ def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str):
             patente: str = i[5]
         latitud = float(dato[2])
         longitud = float(dato[3])
-        if river(latitud, longitud) == True:
+        if cercano_al_estadio(river[0], river[1], latitud, longitud) == True:
             print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
 
 def verSiEsRobado(listaDeRobados:list, denuncias: str) -> None:
