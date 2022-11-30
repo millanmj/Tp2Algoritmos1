@@ -50,18 +50,19 @@ def validar_patente(data: str, thresh) -> bool:
 
 
 def consultaApiPatente(ruta_foto: str) -> str:
-    print('estoy por consultar apipatente')
+    # print('estoy por consultar apipatente')
     with open(ruta_foto, 'rb') as fp:
         response = requests.post(
             'https://api.platerecognizer.com/v1/plate-reader/',
             data=dict(regions=['ar']),  # Optional , config=json.dumps(dict(region="strict"))
             files=dict(upload=fp), headers={'Authorization': f'Token {APIKEY}'})
-    print('estoy por consultar apipatente')
-    pprint(response.json())
-
+    # print('ya consulte apipatente')
+    # pprint(response.json())
 
     patente= (response.json()['results'][0]['plate']).upper()
     patente = patente[0:2]+' '+patente[2:5]+' '+patente[5:7]
+
+    # print(patente)
 
     return patente
    
@@ -69,7 +70,7 @@ def consultaApiPatente(ruta_foto: str) -> str:
 def reconocer_patente(ruta_foto: str):
     
     img = cv2.imread(ruta_foto) 
-    #grayscale = False
+    # grayscale = True
     patente_validada = False
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = cv2.blur(gray,(3,3))
