@@ -324,7 +324,7 @@ def main() -> None:
 
         elif (opcion == 2):     
             print('2- Listar todas las infracciones dentro del centro de la ciudad') 
-            verSiPerteneceAlRangoDeCoordenadas('Denuncias.csv', 'datosProcesados.csv')   
+            verSiPerteneceAlRangoDeCoordenadas('Denuncias.csv')   
 
         elif (opcion == 3):
             print('3- Listar los autos infraccionados con pedido de captura')
