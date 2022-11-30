@@ -20,6 +20,7 @@ from deteccionplacas import reconocer_patente
 
 from punto3y4 import boca
 from punto3y4 import river
+from punto3y4 import pertenece_al_cuadrante
 
 APIKEY = settings.APIKEY
 
@@ -185,9 +186,23 @@ def enviar_rutas_audios(datos:list):
     
     return denunciasEnTexto
 
-def verSiPerteneceAlRangoDeCoordenadas(denuncias: str):
+def verSiPerteneceAlRangoDeCoordenadas(denuncias: str, datosprocesados: str):
 
-    pass
+    autosCoordenadas: list = []
+    autosCoordenadas = leerCSV(denuncias)
+    autosCercanos: list = []
+    autosCercanos = leerCSV(datosprocesados)
+
+    print("\nAutos dentro de la ciudad: \n")
+    
+    for dato in autosCoordenadas:
+        for i in autosCercanos:
+            patente: str = i[5]
+        latitud = float(dato[2])
+        longitud = float(dato[3])
+        pertenece_al_cuadrante(latitud, longitud)
+        if pertenece_al_cuadrante(latitud, longitud) == True:
+            print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
 
 def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str):
 
@@ -254,6 +269,7 @@ def consultarPatente(archivo1: str, archivo2: str) -> None:
     patente: str = input('Ingrese la patente que desea consultar: ')
     consulta['patente'] = patente
     
+    #FALTA VALIDAR SI LA PATENTE SE ENCUENTRA EN EL CSV, SINO DEBEMOS MOSTRAR UN MENSAJE BONITO
 
     #Hay que obtener la latitud, la longitud, y la ruta de la imagen
     denuncias= leerCSV(archivo1)

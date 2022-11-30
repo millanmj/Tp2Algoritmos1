@@ -1,3 +1,5 @@
+
+#https://github.com/UB-Mannheim/tesseract/wiki
 import cv2
 from PIL import Image
 import numpy as np
@@ -5,12 +7,17 @@ import matplotlib.pyplot as plt
 import pytesseract
 # from darkflow.net.build import TFNet
 
+from settings import settings
+
 #Importaciones para la api plate recognizer
 import requests
 from pprint import pprint
 import json
+PATH :str = settings.PATH_PYS 
+APIKEY:str = settings.PLATE_APIKEY
 
-pytesseract.pytesseract.tesseract_cmd = (f'C:\\Users\\Agustin\\AppData\\Local\\Tesseract-OCR\\tesseract.exe')
+pytesseract.pytesseract.tesseract_cmd = (f'{PATH}')
+
 
 
 def validar_patente(data: str, thresh) -> bool:
@@ -41,6 +48,23 @@ def validar_patente(data: str, thresh) -> bool:
         
     return patente_validada
 
+
+def consultaApiPatente(ruta_foto: str) -> str:
+    print('estoy por consultar apipatente')
+    with open(ruta_foto, 'rb') as fp:
+        response = requests.post(
+            'https://api.platerecognizer.com/v1/plate-reader/',
+            data=dict(regions=['ar']),  # Optional , config=json.dumps(dict(region="strict"))
+            files=dict(upload=fp), headers={'Authorization': f'Token {APIKEY}'})
+    print('estoy por consultar apipatente')
+    pprint(response.json())
+
+
+    patente= (response.json()['results'][0]['plate']).upper()
+    patente = patente[0:2]+' '+patente[2:5]+' '+patente[5:7]
+
+    return patente
+   
 
 def reconocer_patente(ruta_foto: str):
     
@@ -88,12 +112,13 @@ def reconocer_patente(ruta_foto: str):
         
     #####################################################
     if (patente_validada == False):
-        data = 'AA 000 AA'
+        data = consultaApiPatente(ruta_foto)
     else:
         data = data.replace("\n", "")       
     
     return data 
-                        
+
+
               # cv2.imshow('Placa', placa)
                 # cv2.imshow('thresh', thresh)
                 # cv2.imshow('sharpen', sharpen)
@@ -104,21 +129,4 @@ def reconocer_patente(ruta_foto: str):
     # cv2.waitKey(0)
 
 ##############################################
-def consultaApiPatente(patente: str) -> str:
-    regions = ['mx', 'us-ca'] # Change to your country
-    with open('/path/to/car.jpg', 'rb') as fp:
-        response = requests.post(
-            'https://api.platerecognizer.com/v1/plate-reader/',
-            data=dict(regions=regions),  # Optional
-            files=dict(upload=fp),
-            headers={'Authorization': 'Token my-token******'})
-    pprint(response.json())
 
-    # Calling with a custom engine configuration
-
-    with open('/path/to/car.jpg', 'rb') as fp:
-        response = requests.post(
-            'https://api.platerecognizer.com/v1/plate-reader/',
-            data=dict(regions=['us-ca'], config=json.dumps(dict(region="strict"))),  # Optional
-            files=dict(upload=fp),
-            headers={'Authorization': 'Token my-token******'})
