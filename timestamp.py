@@ -49,7 +49,7 @@ def main():
     # ts_11 = datetime.timestamp(fecha_11)
     # denuncia11 = mostrar_timestamp(ts_11)
 
-    fecha_12 = datetime(2022,6,27,10,54,10)
+    fecha_12 = datetime(2022,11,11,23,54,10)
     ts_12 = datetime.timestamp(fecha_12)
     denuncia12 = mostrar_timestamp(ts_12)
 
