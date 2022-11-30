@@ -18,9 +18,7 @@ import cv2
 
 from deteccionplacas import reconocer_patente
 
-from punto3y4 import boca
-from punto3y4 import river
-from punto3y4 import pertenece_al_cuadrante
+from punto3y4 import *
 
 APIKEY = settings.APIKEY
 
@@ -218,7 +216,6 @@ def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str):
             patente: str = i[5]
         latitud = float(dato[2])
         longitud = float(dato[3])
-        boca(latitud, longitud)
         if boca(latitud, longitud) == True:
             print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
 
@@ -229,8 +226,7 @@ def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str):
             patente: str = i[5]
         latitud = float(dato[2])
         longitud = float(dato[3])
-        river(latitud, longitud)
-        if boca(latitud, longitud) == True:
+        if river(latitud, longitud) == True:
             print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
 
 def verSiEsRobado(listaDeRobados:list, denuncias: str) -> None:
