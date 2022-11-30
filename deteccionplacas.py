@@ -57,8 +57,8 @@ def consultaApiPatente(ruta_foto: str) -> str:
             data=dict(regions=['ar']),  # Optional , config=json.dumps(dict(region="strict"))
             files=dict(upload=fp), headers={'Authorization': f'Token {APIKEY}'})
     print('estoy por consultar apipatente')
-    pprint(response.json())
-
+    #pprint(response.json())
+    print("----")
 
     patente= (response.json()['results'][0]['plate']).upper()
     patente = patente[0:2]+' '+patente[2:5]+' '+patente[5:7]
@@ -70,7 +70,7 @@ def reconocer_patente(ruta_foto: str):
     
     img = cv2.imread(ruta_foto) 
     #grayscale = False
-    patente_validada = False
+    patente_validada:bool = False
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = cv2.blur(gray,(3,3))
     canny = cv2.Canny(gray,150,200)
@@ -105,12 +105,12 @@ def reconocer_patente(ruta_foto: str):
                     while ((patente_validada == False) and (configuracion < 14)):
                         # print('valor de configuracion: ',configuracion)
                         data = pytesseract.image_to_string(thresh, config=f'--psm {configuracion}')
-                        patente_validada = validar_patente(data, thresh)
+                        patente_validada = validar_patente(data, thresh)#aca me inidica si es true
                         configuracion += 1
         # print('valor de iteración:',valorDeIteracion)
         valor_iteracion += 1
         
-    #####################################################
+    
     if (patente_validada == False):
         data = consultaApiPatente(ruta_foto)
     else:
@@ -127,6 +127,4 @@ def reconocer_patente(ruta_foto: str):
     # # cv2.imshow('Canny', canny)
     # cv2.moveWindow('Image',45,10)
     # cv2.waitKey(0)
-
-##############################################
 

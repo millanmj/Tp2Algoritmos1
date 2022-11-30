@@ -157,6 +157,7 @@ def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:
     data.append(dataJson['properties']['components']['city'])
     data.append(dataJson['properties']['components']['country'])     
     
+    print('esta es la respuesta de la api direccion ', data)
     return data
     
 
@@ -193,9 +194,8 @@ def verSiPerteneceAlRangoDeCoordenadas(denuncias: str, datosprocesados: str):
 
     print("\nAutos dentro de la ciudad: \n")
     
-    for dato in autosCoordenadas:
-        for i in autosCercanos:
-            patente: str = i[5]
+    for index, dato in enumerate(autosCoordenadas):
+        patente: str = autosCercanos[index][5]            
         latitud = float(dato[2])
         longitud = float(dato[3])
         pertenece_al_cuadrante(latitud, longitud)
@@ -213,31 +213,31 @@ def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str):
 
     print("\nAutos cercanos al estadio de Boca: \n")
     
-    for dato in autosCoordenadas:
-        for i in autosCercanos:
-            patente: str = i[5]
+    for index, dato in enumerate(autosCoordenadas):
+        patente: str = autosCercanos[index][5]
         latitud = float(dato[2])
         longitud = float(dato[3])
-        if cercano_al_estadio(boca[0], boca[1], latitud, longitud) == True:
+
+        cercano = cercano_al_estadio(boca[0], boca[1], latitud, longitud)
+        if ( cercano == True):
             print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
 
     print("\nAutos cercanos al estadio de River: \n")
 
-    for dato in autosCoordenadas:
-        for i in autosCercanos:
-            patente: str = i[5]
+    for index, dato in enumerate(autosCoordenadas):
+        patente: str = autosCercanos[index][5]        
         latitud = float(dato[2])
         longitud = float(dato[3])
         if cercano_al_estadio(river[0], river[1], latitud, longitud) == True:
             print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
 
-def verSiEsRobado(listaDeRobados:list, denuncias: str) -> None:
+def verSiEsRobado(listaDeRobados:list, datosProcesados: str) -> None:
     
     
     autosRobados: list = []
     formulario_robados:dict = {}
     autosDenunciados: list = []
-    autosDenunciados = leerCSV(denuncias)
+    autosDenunciados = leerCSV(datosProcesados)
     
     #print(autosDenunciados)
     for auto in autosDenunciados:
@@ -322,7 +322,7 @@ def main() -> None:
 
         elif (opcion == 2):     
             print('2- Listar todas las infracciones dentro del centro de la ciudad') 
-            verSiPerteneceAlRangoDeCoordenadas('Denuncias.csv')   
+            verSiPerteneceAlRangoDeCoordenadas('Denuncias.csv', 'datosProcesados.csv')   
 
         elif (opcion == 3):
             print('3- Listar los autos infraccionados con pedido de captura')
