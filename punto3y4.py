@@ -39,9 +39,11 @@ def pertenece_al_cuadrante(latitud: float, longitud: float) -> bool:
     return False
 
 # test
-print(pertenece_al_cuadrante(-34.603612, -58.380484))
-print(pertenece_al_cuadrante(-34.607064, -58.381523))
-# print(boca(-34.548316, -58.455670))
-# print(boca(-34.633035, -58.358510))
-# print(river(-34.548316, -58.455670))
-# print(river(-34.633035, -58.358510))
+# boca: tuple = (-34.635614, -58.364669)
+# river: tuple = (-34.545290, -58.449740)
+# print(pertenece_al_cuadrante(-34.603612, -58.380484))
+# print(pertenece_al_cuadrante(-34.607064, -58.381523))
+# print(cercano_al_estadio(boca[0], boca[1], -34.548316, -58.455670))
+# print(cercano_al_estadio(boca[0], boca[1], -34.633035, -58.358510))
+# print(cercano_al_estadio(river[0], river[1], -34.548316, -58.455670))
+# print(cercano_al_estadio(river[0], river[1], -34.633035, -58.358510))

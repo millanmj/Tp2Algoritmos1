@@ -19,6 +19,7 @@ import cv2
 from deteccionplacas import reconocer_patente
 
 from punto3y4 import *
+from punto7 import *
 
 APIKEY = settings.APIKEY
 
@@ -39,7 +40,7 @@ def menu()-> int:
         '3- Listar los autos infraccionados con pedido de captura',
         '4- Listar autos infraccionados cercanos a los estadios',
         '5- Consultar infracciones por patente',
-        '6- Mostrar estadisticas de denuncias',
+        '6- Mostrar grafico de denuncias por mes',
         '7- Ingrese 0 para salir'
     ]
     
@@ -315,7 +316,6 @@ def main() -> None:
 
         if (opcion == 1):
             print('1- Procesar archivo de denuncias')
-            lista = leerCSV('Denuncias.csv') 
             print('Aguarde por favor, su archivo esta siendo procesado')
             crearCsv(lista)
             print('Su archivo de denuncias ha sido procesado correctamente')   
@@ -338,18 +338,14 @@ def main() -> None:
             consultarPatente('denuncias.csv', 'datosProcesados.csv')
 
         elif (opcion == 6):
-            print('6- Mostrar estadisticas de denuncias')
-        
+            print('6- Mostrar grafico de denuncias por mes')
+            diccionario: dict = generar_diccionario(lista)
+            graficar(diccionario)
+
         else: exit()
-   
+
     # print(robados)
 
-        
-         
-        
-        
-        
-        
 
 main()
 
