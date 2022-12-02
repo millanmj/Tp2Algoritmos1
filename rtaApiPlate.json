@@ -1,0 +1,24 @@
+
+['results'][0]['plate']
+
+{'camera_id': None,
+
+ 'filename': '2339_y4Ym7_003.jpg',
+
+ 'processing_time': 43.785,
+
+ 'results': [{'box': {'xmax': 237, 'xmin': 132, 'ymax': 334, 'ymin': 297},
+ 
+              'candidates': [{'plate': 'ae182ay', 'score': 0.895}],
+              'dscore': 0.757,
+              'plate': 'ae182ay',
+              'region': {'code': 'ar', 'score': 0.857},
+              'score': 0.895,
+              'vehicle': {'box': {'xmax': 500,
+                                  'xmin': 26,
+                                  'ymax': 427,
+                                  'ymin': 52},
+                          'score': 0.613,
+                          'type': 'Sedan'}}],
+ 'timestamp': '2022-11-29T23:39:44.302578Z',
+ 'version': 1}
