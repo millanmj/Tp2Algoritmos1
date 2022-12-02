@@ -17,14 +17,16 @@ import webbrowser
 import cv2
 
 from deteccionplacas import reconocer_patente
+from deteccionplacas import validar_patente
 
 from punto3y4 import *
 from punto7 import *
 
+
 APIKEY = settings.APIKEY
 
 
-#FUNCION PARA BORRAR
+#FUNCION PARA BORRAR (es para borrar)
 def cls() -> None:
     command = 'clear'
 
@@ -162,8 +164,6 @@ def obtenerDireccion(datos: list, latitud: float, longitud: float) -> list:
     return data
     
 
-
-
 def convertirVozATexto(ruta_archivo:str) -> str:
     r = sr.Recognizer()
     prueba = sr.AudioFile(ruta_archivo)
@@ -186,6 +186,7 @@ def enviar_rutas_audios(datos:list):
     
     return denunciasEnTexto
 
+
 def verSiPerteneceAlRangoDeCoordenadas(denuncias: str, datosprocesados: str):
 
     autosCoordenadas: list = []
@@ -202,6 +203,9 @@ def verSiPerteneceAlRangoDeCoordenadas(denuncias: str, datosprocesados: str):
         pertenece_al_cuadrante(latitud, longitud)
         if pertenece_al_cuadrante(latitud, longitud) == True:
             print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
+
+    volver_a_menu: str = input("Presione ENTER para volver al menu")
+
 
 def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str):
 
@@ -232,6 +236,9 @@ def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str):
         if cercano_al_estadio(river[0], river[1], latitud, longitud) == True:
             print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
 
+    volver_a_menu: str = input("Presione ENTER para volver al menu")
+
+
 def verSiEsRobado(listaDeRobados:list, datosProcesados: str) -> None:
     
     
@@ -258,6 +265,8 @@ def verSiEsRobado(listaDeRobados:list, datosProcesados: str) -> None:
             print("----------------------------------------------")
             autosRobados.append([value[1],value[2],fecha,key])
 
+    volver_a_menu: str = input("Presione ENTER para volver al menu")
+
 
 def consultarPatente(archivo1: str, archivo2: str) -> None:
 
@@ -265,39 +274,52 @@ def consultarPatente(archivo1: str, archivo2: str) -> None:
     denuncias: list = []
     datosProcesados: list = []
 
-    patente: str = input('Ingrese la patente que desea consultar: ')
-    consulta['patente'] = patente
+    patente: str = str(input('Ingrese la patente que desea consultar de la siguiente manera AB 000 CD: '))  
+    patente_valida: bool = bool(validar_patente(patente+' '))
+
+    while((patente_valida != True) and (patente != "N")):        
+        patente: str = str(input('Patente invalida, por favor reingrese la patente de la siguiente manera AB 000 CD, N para salir: ')).upper()
+        
+        
     
     #FALTA VALIDAR SI LA PATENTE SE ENCUENTRA EN EL CSV, SINO DEBEMOS MOSTRAR UN MENSAJE BONITO
 
-    #Hay que obtener la latitud, la longitud, y la ruta de la imagen
+
     denuncias= leerCSV(archivo1)
 
     #hay que obtener la patente
     datosProcesados= leerCSV(archivo2)
     
+    patentes: list = []
+
     for dato in datosProcesados:
+
+        # patente_dato = dato[5]
+        patentes.append(dato[5])
+
         if (dato[5] == patente):
             consulta['patente'] = dato[5]
-            consulta['timestamp'] = dato[0]                       
+            consulta['timestamp'] = dato[0]                     
+        
     
-    for dato in denuncias:
-        if (consulta['timestamp'] == dato[0]):
-            consulta['latitud'] = dato[2]
-            consulta['longitud'] = dato[3]
-            consulta['rutaImagen'] = dato[4]
+            for dato in denuncias:
+                if (consulta['timestamp'] == dato[0]):
+                    consulta['latitud'] = dato[2]
+                    consulta['longitud'] = dato[3]
+                    consulta['rutaImagen'] = dato[4]
+            #Abrimos la ubicación en el navegador
+            webbrowser.open('https://maps.google.com/?q='+ consulta['latitud'] +','+ consulta['longitud'], new=2, autoraise=True)
 
-    #Abrimos la ubicación en el navegador
-    webbrowser.open('https://maps.google.com/?q='+ consulta['latitud'] +','+ consulta['longitud'], new=2, autoraise=True)
+            imagen = cv2.imread(consulta['rutaImagen']) 
+            cv2.imshow('Patente consultada',imagen)
+            cv2.waitKey(0)
 
-    imagen = cv2.imread(consulta['rutaImagen']) 
-    cv2.imshow('Patente consultada',imagen)
-    cv2.waitKey(0)
+    if patente not in patentes:   
+        print('No se encontra ninguna denuncia')
+    else:
+        print('Esta es la patente consultada:\n', consulta)
 
     #cv2.destroyAllWindows()
-        
-    print('esta la consulta', consulta)
-
 
 def main() -> None:
 
@@ -310,17 +332,19 @@ def main() -> None:
 
 
     opcion: int= 1
-
+    
     while(opcion!= 0):
+        
         opcion= menu()
 
         if (opcion == 1):
             print('1- Procesar archivo de denuncias')
             print('Aguarde por favor, su archivo esta siendo procesado')
             crearCsv(lista)
-            print('Su archivo de denuncias ha sido procesado correctamente')   
-
+            print('Su archivo de denuncias ha sido procesado correctamente')  
+            
         elif (opcion == 2):     
+            cls()
             print('2- Listar todas las infracciones dentro del centro de la ciudad') 
             verSiPerteneceAlRangoDeCoordenadas('Denuncias.csv', 'datosProcesados.csv')   
 
@@ -336,15 +360,23 @@ def main() -> None:
         elif (opcion == 5):
             print('5- Consultar infracciones por patente')
             consultarPatente('denuncias.csv', 'datosProcesados.csv')
+            variable = input('Desea continuar? S/N: ').upper()
+            while variable == "S":
+                consultarPatente('denuncias.csv', 'datosProcesados.csv')
+                variable = input('Desea continuar? S/N: ').upper()
 
         elif (opcion == 6):
+            cls()
             print('6- Mostrar grafico de denuncias por mes')
             diccionario: dict = generar_diccionario(lista)
             graficar(diccionario)
 
-        else: exit()
+        # elif(opcion == 0):
+        #     exit()
 
-    # print(robados)
+        # else: opcion= menu()
+
+        else: exit()
 
 
 main()
