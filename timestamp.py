@@ -44,6 +44,7 @@ def main():
     # fecha_10 = datetime(2022,11,11,14,23,20)
     # ts_10 = datetime.timestamp(fecha_10)
     # denuncia10 = mostrar_timestamp(ts_10)
+<<<<<<< HEAD
 
     fecha_11 = datetime(2022,11,12,20,54,10)
     ts_11 = datetime.timestamp(fecha_11)
@@ -51,6 +52,18 @@ def main():
     print('denuncia11 es', ts_11)
     timestamp = 1545730073
     dt_object = datetime.fromtimestamp(ts_11).month
+=======
+
+    # fecha_11 = datetime(2022,11,12,20,54,10)
+    # ts_11 = datetime.timestamp(fecha_11)
+    # denuncia11 = mostrar_timestamp(ts_11)
+
+    fecha_12 = datetime(2022,11,11,23,54,10)
+    ts_12 = datetime.timestamp(fecha_12)
+    denuncia12 = mostrar_timestamp(ts_12)
+
+
+>>>>>>> a929fe21aa232f3c70a31bb37a580de76f0b49b5
 
     print("dt_object =", dt_object)
     print("type(dt_object) =", type(dt_object))
