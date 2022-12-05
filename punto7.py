@@ -32,7 +32,7 @@ def graficar(diccionario: dict) -> None:
     values = list(diccionario.values())
 
     plt.figure(figsize=(12, 5))  # dimensiones del grafico (ancho, alto)
-    plt.bar(range(len(diccionario)), values, tick_label=names)
+    plt.bar(range(len(diccionario)), values, tick_label=names)#sobre x
     addlabels(range(len(diccionario)), values)
     plt.title("Denuncias por mes")
     plt.xlabel("Meses")

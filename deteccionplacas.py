@@ -90,14 +90,14 @@ def reconocer_patente(ruta_foto: str) -> str:
     
     valor_iteracion: int = 1
     while((valor_iteracion < 6) and (patente_validada == False)):
-    #####################################################
+ 
         canny = cv2.dilate(canny,None,iterations = valor_iteracion) #Define el grosor del contorno
         cnts,_ = cv2.findContours(canny, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE) # Buscando los contornos
         # cv2.drawContours(img,cnts,-1,(0,255,0),2) #Sirve para testear y ver los contornos definidos en color verde
 
         for c in cnts:
             area = cv2.contourArea(c)
-            x,y,w,h = cv2.boundingRect(c)
+            x,y,w,h = cv2.boundingRect(c) #Recorta la foto en la patente
             epsilon = 0.09*cv2.arcLength(c,True)
             approx = cv2.approxPolyDP(c,epsilon,True)
             if len(approx)==4 and area > 2000: #4 son los vertices, 2000 es el area que se define para filtrar la patente
@@ -130,14 +130,3 @@ def reconocer_patente(ruta_foto: str) -> str:
         data = data.replace("\n", "")       
     
     return data 
-
-
-              # cv2.imshow('Placa', placa)
-                # cv2.imshow('thresh', thresh)
-                # cv2.imshow('sharpen', sharpen)
-
-    # cv2.imshow('Image', img)
-    # # cv2.imshow('Canny', canny)
-    # cv2.moveWindow('Image',45,10)
-    # cv2.waitKey(0)
-

@@ -110,8 +110,6 @@ def compararDenuncia( timestamp: str, archivoProcesados: str) -> bool:
     try:
         datosProcesados = leerCSV(archivoProcesados)
        
-        
-
         for fila in datosProcesados:    
             print(f'IdDenuncias: {timestamp}', end='   ')
             print(f'Id Arhivos procesados: {fila[0]}')        
@@ -127,12 +125,12 @@ def compararDenuncia( timestamp: str, archivoProcesados: str) -> bool:
 
    
 def procesarDenuncia(dato: list) -> list:
-    # matriz: list = []
+
     lista:list = []
     timestamp: str = dato[0]
     telefono: str = dato[1]    
             
-    ubicacion= obtenerDireccion(dato[2], dato[3])
+    ubicacion= obtenerDireccion(dato[2], dato[3])#consulta la api
 
     direccion: str = ubicacion[0]
     localidad: str = ubicacion[1] + ', ' +ubicacion[2]
@@ -152,15 +150,11 @@ def procesarDenuncia(dato: list) -> list:
     lista.append(descripcion_en_txt)
     lista.append(descripcion_del_audio)
 
-    # matriz.append(lista)
-
-    #Agrega una denuncia procesada!
     return lista
 
 
 def crearCsv(datos: list) -> None:
-    audios : list = []
-    ubicacion: list = []  
+ 
     matriz: list = []
     nuevasDenuncias: list = []
     matriz:list = [["Timestamp", "Telefono", "Dirección", "Localidad", "Pais", "Patente", "Descripcion_en_txt",  "Descripcion_del_audio"]]
@@ -170,24 +164,16 @@ def crearCsv(datos: list) -> None:
     for denuncia in denunciados:
         matriz.append(denuncia)
 
-    print(matriz)
-
-    #Verifico si existe el archivos de datos procesados  
-   
-    
+    #Verifico si existe el archivos en datos procesados  
     for dato in datos: 
-        #print(dato)
         existeDenuncia = compararDenuncia(dato[0], 'datosProcesados.csv')
-        #print('denuncia: ', existeDenuncia)
-        
+
         if(existeDenuncia == False ):
             nuevasDenuncias.append(procesarDenuncia(dato))
     print(f'estas son las nuevas denuncias  {nuevasDenuncias}')
     
     for fila in nuevasDenuncias:
         matriz.append(fila)
-
-    
 
     try: 
         with open('datosProcesados.csv', 'w', newline='', encoding="UTF-8") as archivo_csv:
@@ -226,22 +212,7 @@ def convertirVozATexto(ruta_archivo:str) -> str:
     denuncia = (r.recognize_google(audio,language='es-ES'))
     return denuncia
 
-
-def enviar_rutas_audios(datos:list):
-    lista_De_rutas:list = []
-    for audio in datos:
-        ruta = audio[6]
-        lista_De_rutas.append(ruta)
-    
-    denunciasEnTexto:list = []
-    for denuncia in (lista_De_rutas):
-        text:str = convertirVozATexto(denuncia)
-        denunciasEnTexto.append(text)
-    
-    return denunciasEnTexto
-
-
-def verSiPerteneceAlRangoDeCoordenadas(denuncias: str, datosprocesados: str):
+def verSiPerteneceAlRangoDeCoordenadas(denuncias: str, datosprocesados: str) -> None:
 
     autosCoordenadas: list = []
     autosCoordenadas = leerCSV(denuncias)
@@ -261,7 +232,7 @@ def verSiPerteneceAlRangoDeCoordenadas(denuncias: str, datosprocesados: str):
     volver_a_menu: str = input("Presione ENTER para volver al menu")
 
 
-def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str):
+def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str) -> None:
 
     autosCoordenadas: list = []
     autosCoordenadas = leerCSV(denuncias)
@@ -300,8 +271,8 @@ def verSiEsRobado(listaDeRobados:list, datosProcesados: str) -> None:
     formulario_robados:dict = {}
     autosDenunciados: list = []
     autosDenunciados = leerCSV(datosProcesados)
-    
-    #print(autosDenunciados)
+
+
     for auto in autosDenunciados:
         formulario_robados[auto[5]] = [auto[0], auto[2],auto[3]]
     
@@ -320,6 +291,7 @@ def verSiEsRobado(listaDeRobados:list, datosProcesados: str) -> None:
             autosRobados.append([value[1],value[2],fecha,key])
 
     volver_a_menu: str = input("Presione ENTER para volver al menu")
+    #Autosrobados no deberia ser retornada?
 
 
 def consultarPatente(archivo1: str, archivo2: str) -> None:
@@ -333,11 +305,8 @@ def consultarPatente(archivo1: str, archivo2: str) -> None:
 
     while((patente_valida != True) and (patente != "N")):        
         patente: str = str(input('Patente invalida, por favor reingrese la patente de la siguiente manera AB 000 CD, N para salir: ')).upper()
-        
-        
-    
-    #FALTA VALIDAR SI LA PATENTE SE ENCUENTRA EN EL CSV, SINO DEBEMOS MOSTRAR UN MENSAJE BONITO
 
+    #FALTA VALIDAR SI LA PATENTE SE ENCUENTRA EN EL CSV, SINO DEBEMOS MOSTRAR UN MENSAJE BONITO
 
     denuncias= leerCSV(archivo1)
 
@@ -346,9 +315,7 @@ def consultarPatente(archivo1: str, archivo2: str) -> None:
     
     patentes: list = []
 
-    for dato in datosProcesados:
-
-        # patente_dato = dato[5]
+    for dato in datosProcesados:    
         patentes.append(dato[5])
 
         if (dato[5] == patente):
@@ -373,17 +340,12 @@ def consultarPatente(archivo1: str, archivo2: str) -> None:
     else:
         print('Esta es la patente consultada:\n', consulta)
 
-    #cv2.destroyAllWindows()
 
 def main() -> None:
 
     lista: list =[]
     robados: list = []
     lista = leerCSV('Denuncias.csv')   
-   
-    #imprimirCsv(lista) 
-    #nuevo_csv = crearCsv(lista)
-
 
     opcion: int= 1
     
@@ -414,7 +376,7 @@ def main() -> None:
         elif (opcion == 5):
             print('5- Consultar infracciones por patente')
             consultarPatente('denuncias.csv', 'datosProcesados.csv')
-            variable = input('Desea continuar? S/N: ').upper()
+            variable:str = input('Desea continuar? S/N: ').upper()
             while variable == "S":
                 consultarPatente('denuncias.csv', 'datosProcesados.csv')
                 variable = input('Desea continuar? S/N: ').upper()
@@ -424,11 +386,6 @@ def main() -> None:
             print('6- Mostrar grafico de denuncias por mes')
             diccionario: dict = generar_diccionario(lista)
             graficar(diccionario)
-
-        # elif(opcion == 0):
-        #     exit()
-
-        # else: opcion= menu()
 
         else: exit()
 
