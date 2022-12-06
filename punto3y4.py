@@ -2,7 +2,7 @@ from math import radians, cos, sin, asin, sqrt
 
 def haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """
-    Formula del semiverseno: Calcula la distancia en kilometros entre 2 puntos de la tierra
+    Formula del semiverseno: Calcula la distancia en kilometros entre 2 puntos de la tierra.
     """
     # convertir grados a radianes
     lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
@@ -16,7 +16,8 @@ def haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
 
 def cercano_al_estadio(latitud1: float, longitud1: float, latitud2: float, longitud2: float) -> bool:
     """
-    Devuelve True si la distancia del auto al estadio es menor a 1km
+    Pre: Recibe las coordenadas de los estadios y de los autos respectivamente.
+    Pos: Devuelve True si la distancia del auto al estadio es menor a 1km.
     """
     distancia: float = haversine(latitud1, longitud1, latitud2, longitud2)
     if distancia < 1.0:
@@ -26,7 +27,8 @@ def cercano_al_estadio(latitud1: float, longitud1: float, latitud2: float, longi
 
 def pertenece_al_cuadrante(latitud: float, longitud: float) -> bool:
     """
-    Devuelve True si la coordenada se encuentra en el cuadrante
+    Pre: Recibe las coordenadas de los autos.
+    Pos: Devuelve True si la coordenada se encuentra en el cuadrante.
     """
     norte: float = -34.599609 # Cordoba
     sur: float = -34.609226 # Rivadavia

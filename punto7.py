@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 def generar_diccionario(lista: list) -> dict:
+    """
+    Pre: Recibe una lista vacia.
+    Pos: Devuelve un diccionario con los meses del año como keys y la cantidad de denuncias por mes como value.
+    """
     
     meses: list = []
     for i in lista:
@@ -21,12 +25,20 @@ def generar_diccionario(lista: list) -> dict:
 
 
 def addlabels(x,y) -> None:
+    """
+    Pre: Recibe coordenadas X e Y.
+    Pos: Define las coordenadas X e Y en el gráfico.
+    """
 
     for i in range(len(x)):
         plt.text(i, y[i], y[i], ha = 'center')
 
 
 def graficar(diccionario: dict) -> None:
+    """
+    Pre: Recibe el diccionario retornado por la funcion generar_diccionario.
+    Pos: Devuelve el gráfico ya terminado con sus respectivos datos; Meses del año en X y Cantidad de denuncias por mes en Y.
+    """
 
     names = list(diccionario.keys())
     values = list(diccionario.values())

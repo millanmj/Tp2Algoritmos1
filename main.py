@@ -117,8 +117,8 @@ def imprimirCsv(datos: list) -> None:
 
 def compararDenuncia( timestamp: str, archivoProcesados: str) -> bool:
     """
-    Pre: recibe el timestamp del archivo de denuncias y la ruta de datosProcesados
-    Pos: devuelve un booleano positivo en caso de que exista el registro.
+    Pre: Recibe el timestamp del archivo de denuncias y la ruta de datosProcesados.
+    Pos: Devuelve un booleano positivo en caso de que exista el registro.
     """
     iguales: bool = False
 
@@ -205,10 +205,8 @@ def crearCsv(datos: list) -> None:
 
 def obtenerDireccion(latitud: float, longitud: float) -> list:  
     """
-    Pre: recibe los datos de latitud y longitud de una dirección
-         correspondiente a una infracción.
-    Pos: retorna una lista con el barrio, la ciudad y el país
-         correspondiente a la infracción.
+    Pre: Recibe los datos de latitud y longitud de una dirección correspondiente a una infracción.
+    Pos: Retorna una lista con el barrio, la ciudad y el país correspondiente a la infracción.
     """
     url: str ='https://api.opencagedata.com/geocode/v1/geojson?q='
     #Llamada a la api de posicionamiento
@@ -226,9 +224,8 @@ def obtenerDireccion(latitud: float, longitud: float) -> list:
 
 def convertirVozATexto(ruta_archivo:str) -> str:
     """
-    Pre: recibe la ruta de los audios con denuncias.
-    Pos: retorna un string que es resultado de transformar el audio
-         a texto.
+    Pre: Recibe la ruta de los audios con denuncias.
+    Pos: Retorna un string que es resultado de transformar el audio a texto.
     """
     r = sr.Recognizer()
     prueba = sr.AudioFile(ruta_archivo)
@@ -239,9 +236,8 @@ def convertirVozATexto(ruta_archivo:str) -> str:
 
 def verSiPerteneceAlRangoDeCoordenadas(denuncias: str, datosprocesados: str) -> None:
     """
-    Pre: recibe dos rutas a archivos con extensión csv.
-    Pos: muestra en pantalla que autos están con infracciones
-         dentro del cuadrante solicitado.
+    Pre: Recibe dos rutas a archivos con extensión csv.
+    Pos: Muestra en pantalla que autos están con infracciones dentro del cuadrante solicitado.
     """
     autosCoordenadas: list = []
     autosCoordenadas = leerCSV(denuncias)
@@ -263,9 +259,8 @@ def verSiPerteneceAlRangoDeCoordenadas(denuncias: str, datosprocesados: str) -> 
 
 def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str) -> None:
     """    
-    Pre: recibe dos rutas a archivos con extensión csv.
-    Pos: muestra en pantalla que autos están con infracciones
-         a menos de 1km de los estadios de River y Boca.
+    Pre: Recibe dos rutas a archivos con extensión csv.
+    Pos: Muestra en pantalla que autos están con infracciones a menos de 1km de los estadios de River y Boca.
     """
     autosCoordenadas: list = []
     autosCoordenadas = leerCSV(denuncias)
@@ -297,10 +292,8 @@ def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str) -> None:
 
 def verSiEsRobado(listaDeRobados:list, datosProcesados: str) -> None:
     """
-    Pre: Recibe una lista con patentes que pertenecen a autos con
-         pedido de captura y una ruta a un archivo con extensión csv.
-    Pos: Muestra en pantalla fecha, hora de la denuncia y ubicación
-         del auto.
+    Pre: Recibe una lista con patentes que pertenecen a autos con pedido de captura y una ruta a un archivo con extensión csv.
+    Pos: Muestra en pantalla fecha, hora de la denuncia y ubicación del auto.
     """
     
     autosRobados: list = []
@@ -332,9 +325,8 @@ def verSiEsRobado(listaDeRobados:list, datosProcesados: str) -> None:
 
 def consultarPatente(archivo1: str, archivo2: str) -> None:
     """
-    Pre: recibe dos rutas a archivos con extensión csv.
-    Pos: Muestra en pantalla la foto del auto y la ubicación en un
-         mapa.
+    Pre: Recibe dos rutas a archivos con extensión csv.
+    Pos: Muestra en pantalla la foto del auto y la ubicación en un mapa.
     """
     consulta: dict = {'timestamp': '', 'latitud':'' , 'longitud': '', 'patente': '', 'rutaImagen':''}
     denuncias: list = []

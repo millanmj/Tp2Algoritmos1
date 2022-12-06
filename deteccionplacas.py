@@ -22,8 +22,8 @@ pytesseract.pytesseract.tesseract_cmd = (f'{PATH}')
 
 def validar_patente(data: str) -> bool:
     """
-    Pre: Recibe la patente sin validar, para verificar si coincide con la estructura de una patente Argentina actual
-    Pos: Devuelve un bool que demuestra si la patente coincide o no
+    Pre: Recibe la patente sin validar, para verificar si coincide con la estructura de una patente Argentina actual.
+    Pos: Devuelve un bool que demuestra si la patente coincide o no.
     """
     
     patente_validada:bool = False
@@ -55,8 +55,8 @@ def validar_patente(data: str) -> bool:
 
 def consultaApiPatente(ruta_foto: str) -> str:
     """
-    Pre: Recibe la la direccion en donde se encuentra la foto si el método de reconocer_patente no funciona
-    Pos: Devuelve la patente despues de pasar por el metodo de la API
+    Pre: Recibe la la direccion en donde se encuentra la foto si el método de reconocer_patente no funciona.
+    Pos: Devuelve la patente despues de pasar por el metodo de la API.
     """
 
    #Enviamos la consulta a la API
@@ -77,8 +77,8 @@ def consultaApiPatente(ruta_foto: str) -> str:
 
 def reconocer_patente(ruta_foto: str) -> str:
     """
-    Pre: Recibe la direccion en donde se encuentra la foto
-    Pos: Devuelve la patente
+    Pre: Recibe la direccion en donde se encuentra la foto.
+    Pos: Devuelve la patente.
     """
     
     img = cv2.imread(ruta_foto) #img recibe la foto
