@@ -111,7 +111,7 @@ def reconocer_patente(ruta_foto: str) -> str:
                     sharpen = cv2.filter2D(placa, -1, sharpen_kernel)
                     thresh = cv2.threshold(sharpen, 0, 255, cv2.THRESH_OTSU)[1] # Deja la imagen en blanco y negro sin ningun tono de gris
 
-                    data = pytesseract.image_to_string(thresh, config='--psm 6')        
+                    data = pytesseract.image_to_string(thresh, config='--psm 6') # Pasa la imagen a string, el texto retornado dependera de la configuracion dada       
                     configuracion = 7
                     patente_validada = validar_patente(data)
 

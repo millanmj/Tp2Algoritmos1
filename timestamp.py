@@ -5,7 +5,7 @@ def mostrar_timestamp (fecha) -> None:
 #CREACIÓN DE REGISTROS DE TIEMPO PARA DENUNCIAS
 
 def main():
-    fecha_1 = datetime(2022,11,5,15,23,20)
+    fecha_1 = datetime(2022,3,30,15,23,20)
     ts_1 = datetime.timestamp(fecha_1)
     denuncia1 = mostrar_timestamp(ts_1)
 
