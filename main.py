@@ -280,9 +280,7 @@ def verSiEsCercanoALosEstadios(denuncias: str, datosprocesados: str) -> None:
         patente: str = autosCercanos[index][5]
         latitud = float(dato[2])
         longitud = float(dato[3])
-
-        cercano = cercano_al_estadio(boca[0], boca[1], latitud, longitud)
-        if ( cercano == True):
+        if cercano_al_estadio(boca[0], boca[1], latitud, longitud) == True:
             print(f"Patente: {patente}\nCoordenadas: {latitud} , {longitud}")
 
     print("\nAutos cercanos al estadio de River: \n")
@@ -343,10 +341,10 @@ def consultarPatente(archivo1: str, archivo2: str) -> None:
     datosProcesados: list = []
 
     patente: str = str(input('Ingrese la patente que desea consultar de la siguiente manera AB 000 CD: '))  
-    patente_valida: bool = bool(validar_patente(patente+' '))
+    patente_valida: bool = bool(validar_patente(patente+' ')) # El espacio (+' ') se agrego como solucion a un inconveniente al ingresar la patente
 
     while((patente_valida != True) and (patente != "N")):        
-        patente: str = str(input('Patente invalida, por favor reingrese la patente de la siguiente manera AB 000 CD, N para salir: ')).upper()
+        patente: str = str(input('Patente invalida, por favor reingrese la patente con el formato AB 000 CD, N para salir: ')).upper()
 
     denuncias= leerCSV(archivo1)
 
