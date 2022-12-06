@@ -12,7 +12,7 @@ def haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
     c = 2 * asin(sqrt(a))
     r = 6371 # Radio de la tierra en km
-    return c * r
+    return c * r #Nos retorna la distancia entre dos puntos en km
 
 def cercano_al_estadio(latitud1: float, longitud1: float, latitud2: float, longitud2: float) -> bool:
     """
