@@ -3,7 +3,7 @@ from datetime import datetime
 
 def generar_diccionario(lista: list) -> dict:
     """
-    Pre: Recibe una lista vacia.
+    Pre: Recibe una lista.
     Pos: Devuelve un diccionario con los meses del año como keys y la cantidad de denuncias por mes como value.
     """
     

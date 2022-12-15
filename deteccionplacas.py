@@ -85,8 +85,9 @@ def reconocer_patente(ruta_foto: str) -> str:
     #grayscale = False
     patente_validada:bool = False
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) #Pasa la imagen a blanco y negro
+    #Detección de bordes
     gray = cv2.blur(gray,(3,3)) # Suaviza la imagen
-    canny = cv2.Canny(gray,150,200) # Deja la imagen en blanco y negro sin ningun tono de gris
+    canny = cv2.Canny(gray,150,200) 
     
     valor_iteracion: int = 1
     while((valor_iteracion < 6) and (patente_validada == False)):
@@ -97,15 +98,16 @@ def reconocer_patente(ruta_foto: str) -> str:
 
         for c in cnts:
             area = cv2.contourArea(c)
-            x,y,w,h = cv2.boundingRect(c) #Recorta la foto en la patente
+            #Nos da posicion x, y, ancho y alto.
+            x,y,w,h = cv2.boundingRect(c) #Detecta rectángulos dentro de la imagen
             epsilon = 0.09*cv2.arcLength(c,True)
             approx = cv2.approxPolyDP(c,epsilon,True)
             if len(approx)==4 and area > 2000: #4 son los vertices, 2000 es el area que se define para filtrar la patente
                 # print('area=', area)
                 cv2.drawContours(img,[c],0,(0,255,0),2)
-                license_ratio = float(w)/h
+                license_ratio = float(w)/h #ancho/alto
                 if license_ratio > 1.4:
-                    placa = gray[y:y+h,x:x+w] # Paso la imagen de la placa a blanco y negro
+                    placa = gray[y:y+h,x:x+w] #imagen de la placa.
                     placa = cv2.resize(placa, None, fx=5, fy=5)
                     sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
                     sharpen = cv2.filter2D(placa, -1, sharpen_kernel)
